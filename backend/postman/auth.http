@@ -1,0 +1,12 @@
+@url_dev = http://localhost:8080/api/auth
+
+#Register test
+POST {{url_dev}}/register
+Content-Type: application/json
+
+{
+    "username": "JohnDoe2", 
+    "email": "exampl9@example.com" , 
+    "password": "123456", 
+    "confirmPassword": "123456"
+}
