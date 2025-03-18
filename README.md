@@ -6,4 +6,5 @@ npm run dev
 
 #run client
 cd /frontend
+
 npm run dev
