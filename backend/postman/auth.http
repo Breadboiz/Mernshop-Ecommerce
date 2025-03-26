@@ -6,7 +6,36 @@ Content-Type: application/json
 
 {
     "username": "JohnDoe2", 
-    "email": "exampl9@example.com" , 
+    "email": "exampl0@xample.com" , 
     "password": "123456", 
     "confirmPassword": "123456"
+}
+
+###########login test 
+POST {{url_dev}}/login
+Content-Type: application/json
+
+{
+    "email": "exampl0@xample.com" , 
+    "password": "123456"
+}
+
+###########logout
+POST {{url_dev}}/logout
+Content-Type: application/json
+x-client-id:67e1c160646dd70584472d73
+Cookie:accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTFjMTYwNjQ2ZGQ3MDU4NDQ3MmQ3MyIsImVtYWlsIjoiZXhhbXBsMEB4YW1wbGUuY29tIiwicm9sZSI6IkNVU1QiLCJpYXQiOjE3NDI5NzcwNDAsImV4cCI6MTc0Mjk3NzE2MH0.ysUvVV18OLu80AkPwtZT9SPPHTPlesOGtuUNKs_2X74
+
+{
+
+}
+
+###########refreshtoken 
+POST {{url_dev}}/refreshtoken
+Content-Type: application/json
+x-client-id:67e1c160646dd70584472d73
+Cookie:refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTFjMTYwNjQ2ZGQ3MDU4NDQ3MmQ3MyIsImVtYWlsIjoiZXhhbXBsMEB4YW1wbGUuY29tIiwicm9sZSI6IkNVU1QiLCJpYXQiOjE3NDI5NzcxODcsImV4cCI6MTc0Mjk3NzI0N30.L6Fpi7j5HpkghoGN4s1LiFctVBXT7D11GJFfNQyVSYE
+
+{
+    
 }
