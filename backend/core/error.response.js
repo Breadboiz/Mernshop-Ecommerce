@@ -16,9 +16,21 @@ class BadRequestError extends ErrorResponse {
         super(message, status);
     }
 }
+class NotFoundError extends ErrorResponse {
+    constructor(message = ReasonPhrases.NOT_FOUND, status = StatusCodes.NOT_FOUND){
+        super(message, status);
+    }
+}
 
+class ForBiddenError extends ErrorResponse {
+    constructor(message = ReasonPhrases.FORBIDDEN, status = StatusCodes.FORBIDDEN){
+        super(message, status);
+    }
+}
 module.exports = {
     ErrorResponse,
     AuthFailedError,
-    BadRequestError
+    NotFoundError,
+    BadRequestError,
+    ForBiddenError
 }

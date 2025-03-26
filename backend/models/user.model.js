@@ -16,7 +16,7 @@ var userSchema = new Schema({
     },
     email:{
         type:String,
-        //required:true,
+        required:true,
         trim: true,
     },
     password:{
@@ -34,4 +34,4 @@ var userSchema = new Schema({
 });
 
 //Export the model
-module.exports = model(DOCUMENT_NAME, userSchema);
+module.exports = model(DOCUMENT_NAME, userSchema); //Usermodel
