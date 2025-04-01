@@ -10,7 +10,7 @@ const protectRoutes = async (req, res, next) => {
 
     const authHeader = req.cookies.accessToken;
     if(authHeader){
-        const accessToken = authHeader ||  authHeader.split(' ')[1];
+        const accessToken = authHeader
     if (accessToken)     {
         try{
         const decodedUser = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
