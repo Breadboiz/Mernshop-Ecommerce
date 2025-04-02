@@ -2,20 +2,24 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import {Route, Routes} from 'react-router-dom';
+import {Route, Routes, Navigate} from 'react-router-dom';
 import RegisterPage from './pages/Register/RegisterPage';
 import LoginPage from './pages/Login/LoginPage';
 import HomePage from './pages/Homepage/HomePage';
+import { useAuthContext } from './context/AuthContext';
+import { Toaster } from 'react-hot-toast';
+import Cookies from 'js-cookie';
 function App() {
-  const [count, setCount] = useState(0)
-
+  const {authUser} = useAuthContext()
   return (
     <div className=''>
       <Routes>
-            <Route path="/" element={< HomePage/>}></Route>
-            <Route  path="/signup" element={<RegisterPage />}></Route>
-            <Route path="/login" element={<LoginPage />}></Route>
+            <Route path="/"  element={<Navigate to="/home"/>}></Route>
+            <Route path="/home" element={< HomePage/>}></Route>
+            <Route  path="/signup" element={ authUser ? <Navigate to="/" /> : <RegisterPage />}></Route>
+            <Route path="/login" element={authUser ? <Navigate to="/" /> : <LoginPage />}></Route>
           </Routes>
+      <Toaster/>    
     </div>
   )
 }
