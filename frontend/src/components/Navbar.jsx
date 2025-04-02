@@ -3,11 +3,18 @@ import { Menu, Scale, X } from "lucide-react"; // Icon menu
 import { Link } from "react-router-dom"; // Nếu dùng React Router
 import { FaSearch, FaShoppingBasket, FaTimes, FaBars   } from "react-icons/fa";
 import {motion , AnimatePresence} from 'framer-motion';
+import {useAuthContext} from '../context/AuthContext'
+import  useLogout  from "../hooks/useLogout";
+import { TbLogout } from "react-icons/tb";
+import { GoPerson } from "react-icons/go";
+
 
 const Navbar = () => {
     const [active, setActive] = useState("HOME");
     const [menuOpen, setMenuOpen] = useState(false);
-
+    const {authUser} = useAuthContext();
+    const {logout} = useLogout();
+   // console.log(authUser);
   return (
     <div>
         <div className="flex items-center justify-between bg-white px-[2rem] lg:px-[6rem] py-2 border-b border-gray-200">
@@ -72,10 +79,34 @@ const Navbar = () => {
                 <input type="text" placeholder="Type here" className="input input-ghost outline-none focus:outline-none" />
                 <button className="cursor-pointer "><FaSearch /></button>
             </form>   
-            <div className="flex items-center justify-center w-10 h-10 bg-black rounded-full relative cursor-pointer ml-10">
-                <FaShoppingBasket className="text-white"/>
-                <span className="absolute top-0 right-0 w-4 h-4 text-white bg-gray-500 rounded-full flex items-center justify-center text-sm">1</span>
-            </div>
+
+
+            {
+            authUser === null ?(
+                <div className="flex items-center justify-center w-auto h-auto ml-10 gap-2">
+                    <button className="btn btn-outline btn-primary"><Link to="/login">Sign in</Link></button>
+                    <button className="btn btn-outline btn-primary hidden sm:block"><Link to="/signup">Sign up</Link></button>
+                </div>
+                )  : (
+                    <div className="flex items-center justify-center">
+                        <div className="dropdown">
+                            <div tabIndex={0} role="button" className="btn m-1">{authUser? authUser.username : <GoPerson/>}</div>
+                            <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+                                <li><a>Profile</a></li>
+                                <li><button onClick={
+                                   logout
+                                }><TbLogout/> Logout</button></li>
+                            </ul>
+                            </div>
+                        <div className="flex items-center justify-center w-10 h-10 bg-black rounded-full relative cursor-pointer  lg:ml-10 ">
+                        <div>
+                        <FaShoppingBasket className="text-white"/>
+                        <span className="absolute top-0 right-0 w-4 h-4 text-white bg-gray-500 rounded-full flex items-center justify-center text-sm">1</span>
+                        </div>
+                    </div>
+                     </div>
+                  )
+            }
         </div>
     </div>
      {/* Mobile Menu */}
