@@ -4,6 +4,7 @@ import useSignup from '../../hooks/useSignup'
 import {Link} from 'react-router-dom'
 
 const RegisterPage = () => {
+
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [email, setEmail] = useState('');

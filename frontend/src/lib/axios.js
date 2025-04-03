@@ -26,8 +26,10 @@ axiosInstance.interceptors.response.use(
                     "x-client-id": clientId,
                 },
             }).catch((error) => {
+                     
                     localStorage.removeItem("user");
                     window.location.href = "/login";
+                    
                     return Promise.reject(error);
             })
             

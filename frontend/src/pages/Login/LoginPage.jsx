@@ -3,7 +3,9 @@ import { FaEyeSlash,FaEye  } from "react-icons/fa";
 import {Link} from 'react-router-dom'
 import useLogin from '../../hooks/useLogin'
 
+
 const LoginPage = () => {
+
     const [showPassword, setShowPassword] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
