@@ -3,7 +3,6 @@ import axios, { Axios } from "axios";
 const axiosInstance = axios.create({
     baseURL: "http://localhost:8080/api",
     headers: {
-        "Content-Type": "application/json",
     },
     withCredentials: true // Quan trọng nếu dùng cookies
 });

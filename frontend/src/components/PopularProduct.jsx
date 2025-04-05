@@ -4,7 +4,7 @@ import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import { ChevronLeft, ChevronRight } from "lucide-react"; // Mũi tên điều hướng
-
+import { Link } from "react-router-dom";
 const products = [
   { name: "Tank Top", description: "Finding perfect t-shirt", price: "$50", image: "/assets/tank_top.jpg" },
   { name: "Corater", description: "Finding perfect products", price: "$50", image: "/assets/corater_shoes.jpg" },
@@ -58,6 +58,9 @@ const PopularProduct = () => {
           <ChevronRight size={24} />
         </button>
       </div>
+
+      <button className="btn btn-outline btn-primary absolute left-1/2 transform -translate-x-1/2 my-5"><Link to={'/shop'}>Xem thêm sản phẩm</Link></button>
+
     </div>
   );
 };

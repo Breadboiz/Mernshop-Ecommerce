@@ -10,16 +10,21 @@ import { useAuthContext } from './context/AuthContext';
 import { Toaster } from 'react-hot-toast';
 import Cookies from 'js-cookie';
 import ShopPage from './pages/ShopPage/ShopPage';
+import NoPage from './pages/404Page/404Page';
+import AdminPage from './pages/AdminPage/AdminPage';
 function App() {
   const {authUser} = useAuthContext()
   return (
     <div className=''>
       <Routes>
+            
             <Route path="/"  element={<Navigate to="/home"/>}></Route>
             <Route path="/home" element={< HomePage/>}></Route>
             <Route  path="/signup" element={ authUser ? <Navigate to="/" /> : <RegisterPage />}></Route>
             <Route path="/login" element={authUser ? <Navigate to="/" /> : <LoginPage />}></Route>
             <Route path="/shop" element={<ShopPage />}></Route>
+            <Route path="/admin-panel" element={authUser && authUser.role === 'AD' ? <AdminPage/>: <Navigate to="*" />}></Route>
+            <Route path="*" element={<NoPage/>}></Route>
           </Routes>
       <Toaster/>    
     </div>
