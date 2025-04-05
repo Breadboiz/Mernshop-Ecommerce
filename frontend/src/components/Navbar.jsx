@@ -7,13 +7,23 @@ import  useLogout  from "../hooks/useLogout";
 import { TbLogout } from "react-icons/tb";
 import { GoPerson } from "react-icons/go";
 
-
 const Navbar = () => {
     const [active, setActive] = useState("HOME");
     const [menuOpen, setMenuOpen] = useState(false);
     const {authUser} = useAuthContext();
-    const {logout} = useLogout();
-   // console.log(authUser);
+    const {searchKeyword,setSearchKeyword} = useAuthContext();
+    const {logout} = useLogout();  // Khi người dùng nhập vào input
+    const [inputValue, setInputValue] = useState(""); // State tạm cho ô input
+
+    const handleInputChange = (event) => {
+      setInputValue(event.target.value); // Chỉ cập nhật local inputValue
+    };
+  
+    // Khi người dùng submit form
+    const handleFormSubmit = (event) => {
+      event.preventDefault(); // Không reload lại trang
+      setSearchKeyword(inputValue); // Chỉ cập nhật searchKeyword khi submit
+    };
   return (
     <div>
         <div className="flex items-center justify-between bg-white px-[2rem] lg:px-[6rem] py-2 border-b border-gray-200">
@@ -74,11 +84,22 @@ const Navbar = () => {
         
         <div className="flex items-center justify-start">
 
-            <form  className="h-[75%] flex items-center gap-2 px-4 border-r border-gray-500">
-                <input type="text" placeholder="Type here" className="input input-ghost outline-none focus:outline-none" />
-                <button className="cursor-pointer "><FaSearch /></button>
-            </form>   
-
+             {/* Search form */}
+        <form
+          className="h-[75%] flex items-center gap-2 px-4 border-r border-gray-500"
+          onSubmit={handleFormSubmit}
+        >
+          <input
+            type="text"
+            placeholder="Type here"
+            className="input input-ghost outline-none focus:outline-none"
+            value={inputValue} // Gán với state tạm
+            onChange={handleInputChange}
+          />
+          <button type="submit" className="cursor-pointer">
+            <FaSearch />
+          </button>
+        </form>
 
             {
             authUser === null ?(

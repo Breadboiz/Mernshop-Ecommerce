@@ -4,7 +4,7 @@ import Footer from '../../components/Footer'
 import { BarChart, PlusCircleIcon, ShoppingBasket } from 'lucide-react';
 import CreateProductForm from '../../components/CreateProductForm/CreateProductForm';
 import AnalyticsTab from '../../components/AnalyticsTab/AnalyticsTab';
-import ProductDetails from '../../components/ProductDetails.jsx/ProductDetails';
+import ManagementTab from '../../components/ManageProductTab/ManagementTab';
 
 
 const AdminPage = () => {
@@ -42,8 +42,8 @@ const AdminPage = () => {
           </div>
           <div className='w-full sm:w-[80%] h-auto py-10'>
           {activeTab === "create" && <CreateProductForm/>}
-          {activeTab === "products" && <ProductDetails/>}
- 		  {activeTab === "analytics" && <AnalyticsTab/>}
+          {activeTab === "products" && <ManagementTab/>}
+ 		       {activeTab === "analytics" && <AnalyticsTab/>}
           </div>
         </div>
         <Footer />

@@ -6,11 +6,11 @@ import toast from "react-hot-toast";
 const CreateProductForm = () => {
   const [product, setProduct] = useState({
     product_name: "",
-    product_branch: "",
+    product_brand: "",
     product_inStock: 0,
     product_price: 0,
     product_description: "",
-    category: "nam",
+    product_category: "nam",
     rating: 0,
   });
 
@@ -51,6 +51,15 @@ const CreateProductForm = () => {
         },
         withCredentials: true,
       });
+      setProduct({
+        product_name: "",
+        product_brand: "",
+        product_inStock: 0,
+        product_price: 0,
+        product_description: "",
+        product_category: "nam",
+        rating: 0,
+      })
       console.log("✅ Product created:", response.data);
       toast.success("Product created successfully!");
     } catch (error) {
@@ -72,7 +81,7 @@ const CreateProductForm = () => {
         <input
           type="text"
           name="product_name"
-          value={product.product_name}
+          value={product.product_name.trim()}
           onChange={handleChange}
           className="w-full border p-2 rounded"
           required
@@ -83,8 +92,8 @@ const CreateProductForm = () => {
         <label className="block mb-1">Product Brand</label>
         <input
           type="text"
-          name="product_branch"
-          value={product.product_branch}
+          name="product_brand"
+          value={product.product_brand.trim()}
           onChange={handleChange}
           className="w-full border p-2 rounded"
           required
@@ -121,7 +130,7 @@ const CreateProductForm = () => {
         <label className="block mb-1">Description</label>
         <textarea
           name="product_description"
-          value={product.product_description}
+          value={product.product_description.trim()}
           onChange={handleChange}
           className="w-full border p-2 rounded"
         ></textarea>
@@ -142,8 +151,8 @@ const CreateProductForm = () => {
       <div>
         <label className="block mb-1">Category</label>
         <select
-          name="category"
-          value={product.category}
+          name="product_category"
+          value={product.product_category}
           onChange={handleChange}
           className="w-full border p-2 rounded"
         >
