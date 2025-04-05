@@ -56,7 +56,7 @@ const LoginPage = () => {
             </form>
 
             <div>
-                <p className='text-slate-400 font-light text-sm mx-1.5 my-3'>Dont have an account yet? <Link to={'/signup'} className='text-blue-600 font-semibold'>Sign in</Link></p>
+                <p className='text-slate-400 font-light text-sm mx-1.5 my-3'>Dont have an account yet? <Link to={'/signup'} className='text-blue-600 font-semibold'>Sign up</Link></p>
             </div>
         </div>
     </div>

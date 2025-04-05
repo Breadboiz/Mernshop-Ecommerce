@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Menu, Scale, X } from "lucide-react"; // Icon menu
 import { Link } from "react-router-dom"; // Nếu dùng React Router
 import { FaSearch, FaShoppingBasket, FaTimes, FaBars   } from "react-icons/fa";
 import {motion , AnimatePresence} from 'framer-motion';
@@ -75,7 +74,7 @@ const Navbar = () => {
         
         <div className="flex items-center justify-start">
 
-            <form className="h-[75%] flex items-center gap-2 px-4 border-r border-gray-500">
+            <form  className="h-[75%] flex items-center gap-2 px-4 border-r border-gray-500">
                 <input type="text" placeholder="Type here" className="input input-ghost outline-none focus:outline-none" />
                 <button className="cursor-pointer "><FaSearch /></button>
             </form>   
