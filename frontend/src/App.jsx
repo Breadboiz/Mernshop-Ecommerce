@@ -12,6 +12,7 @@ import Cookies from 'js-cookie';
 import ShopPage from './pages/ShopPage/ShopPage';
 import NoPage from './pages/404Page/404Page';
 import AdminPage from './pages/AdminPage/AdminPage';
+import UpdateProductForm from './components/UpdateProductForm/UpdateProductForm';
 function App() {
   const {authUser} = useAuthContext()
   return (
@@ -24,6 +25,8 @@ function App() {
             <Route path="/login" element={authUser ? <Navigate to="/" /> : <LoginPage />}></Route>
             <Route path="/shop" element={<ShopPage />}></Route>
             <Route path="/admin-panel" element={authUser && authUser.role === 'AD' ? <AdminPage/>: <Navigate to="*" />}></Route>
+            {/* route con ? */}
+            {/* <Route path="update/:id" element={<AdminPage />} /> */}
             <Route path="*" element={<NoPage/>}></Route>
           </Routes>
       <Toaster/>    
