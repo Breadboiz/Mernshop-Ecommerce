@@ -12,10 +12,10 @@ class connectMongoDB {
     connect(type = 'mongodb') {
         console.log(connectString)
         checkConnect()
-        if(process.env.NODE_ENV !== 'production') {
-            mongoose.set('debug', true);
-            mongoose.set('debug', { color: true });
-        }
+        // if(process.env.NODE_ENV !== 'production') {
+        //     mongoose.set('debug', true);
+        //     mongoose.set('debug', { color: true });
+        // }
         mongoose.connect(connectString, {
             maxPoolSize:100
         })

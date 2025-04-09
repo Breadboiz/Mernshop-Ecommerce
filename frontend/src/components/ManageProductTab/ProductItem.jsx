@@ -1,5 +1,5 @@
 import { FilePenLine, Trash2 } from 'lucide-react'
-import React from 'react'
+import React, { useEffect } from 'react'
 import useDeleteProduct from '../../hooks/useDeleteProduct'
 import { Outlet } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
@@ -7,18 +7,9 @@ import { useNavigate } from 'react-router-dom';
 
 
 const ProductItem = ({index, product, cb}) => {
-    const navigate = useNavigate();
-    const fetchProducts = async () => {
-        try {
-          const response = await axiosInstance.get('/products', {
-            withCredentials: true
-          } );
-          setProducts(response.data.metadata); // Cập nhật danh sách sản phẩm
-        } catch (error) {
-          console.error("Lỗi khi tìm sản phẩm:", error);
-        }
-      };
+   
     const {loading, deleteProduct} = useDeleteProduct()
+
   return (
     <li className='flex w-full h-[7rem] items-center px-2 sm:px-10 justify-between border-b border-gray-200'>
         <div className='flex items-center h-full '>
@@ -36,7 +27,7 @@ const ProductItem = ({index, product, cb}) => {
 
            <FilePenLine className='hover:text-amber-500'/>
             </button>
-             <button className="btn btn-square btn-ghost" onClick={() => deleteProduct(product._id,cb)}>
+             <button className="btn btn-square btn-ghost" onClick={() => deleteProduct(product._id, cb)}>
              
 
                 {loading ? <span className="loading loading-dots loading-md"></span>:<Trash2 className='hover:text-amber-500'/>}

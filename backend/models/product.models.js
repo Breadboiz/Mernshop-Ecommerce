@@ -10,7 +10,7 @@ const productSchema = new Schema({
         type: String,
         required: true
     },
-    product_branch:{
+    product_brand:{
         type: String,
         required: true
     }
@@ -26,16 +26,22 @@ const productSchema = new Schema({
         required: true,
         min: 0
     },
-    prroduct_description: {
+    product_description: {
         type: String,
-        required: true
+        //required: true
     },
-    product_image: [{
+    product_thumbnail: {
+        url: { type: String },
+        public_id: { type: String }
+    },
+    // product_image: [{
+    //     image: { type: String },
+    //     image_url: { type: String }
+    // }],
+    product_category: {
         type: String,
-    }],
-    category: {
-        type: String,
-        enums: ['nam', 'nữ','đôi']
+        enums: ['nam', 'nữ','đôi'],
+        required: true
     },
     rating: {
         type: Number,
@@ -50,6 +56,11 @@ const productSchema = new Schema({
     collection: COLLECTION_NAME,
     timestamps: true
 }); 
+
+productSchema.index({ 
+    product_name: 'text', 
+    product_description: 'text' 
+  });
 productSchema.pre('save', function(next) {
    this.slug = slugify(this.product_name, { lower: true });
    next();

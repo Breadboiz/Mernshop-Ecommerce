@@ -5,9 +5,10 @@ POST {{url_dev}}/register
 Content-Type: application/json
 
 {
-    "username": "JohnDoe2", 
-    "email": "exampl0@xample.com" , 
+    "username": "admin", 
+    "email": "admin.com" , 
     "password": "123456", 
+    "roles": "AD",
     "confirmPassword": "123456"
 }
 
@@ -24,7 +25,7 @@ Content-Type: application/json
 POST {{url_dev}}/logout
 Content-Type: application/json
 x-client-id:67e1c160646dd70584472d73
-Cookie:accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTFjMTYwNjQ2ZGQ3MDU4NDQ3MmQ3MyIsImVtYWlsIjoiZXhhbXBsMEB4YW1wbGUuY29tIiwicm9sZSI6IkNVU1QiLCJpYXQiOjE3NDI5NzcwNDAsImV4cCI6MTc0Mjk3NzE2MH0.ysUvVV18OLu80AkPwtZT9SPPHTPlesOGtuUNKs_2X74
+Cookie:accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTFjMTYwNjQ2ZGQ3MDU4NDQ3MmQ3MyIsImVtYWlsIjoiZXhhbXBsMEB4YW1wbGUuY29tIiwicm9sZSI6IkNVU1QiLCJpYXQiOjE3NDM2NzY2MTQsImV4cCI6MTc0Mzc2MzAxNH0.yOmrsJMQ8KDNbE_UNMq43xIX8V--LTPa8hrXeU0OqDs
 
 {
 
@@ -34,7 +35,7 @@ Cookie:accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTFjMTYwNjQ2
 POST {{url_dev}}/refreshtoken
 Content-Type: application/json
 x-client-id:67e1c160646dd70584472d73
-Cookie:refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTFjMTYwNjQ2ZGQ3MDU4NDQ3MmQ3MyIsImVtYWlsIjoiZXhhbXBsMEB4YW1wbGUuY29tIiwicm9sZSI6IkNVU1QiLCJpYXQiOjE3NDI5NzcxODcsImV4cCI6MTc0Mjk3NzI0N30.L6Fpi7j5HpkghoGN4s1LiFctVBXT7D11GJFfNQyVSYE
+Cookie:refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTFjMTYwNjQ2ZGQ3MDU4NDQ3MmQ3MyIsImVtYWlsIjoiZXhhbXBsMEB4YW1wbGUuY29tIiwicm9sZSI6IkNVU1QiLCJpYXQiOjE3NDM1OTU1MDAsImV4cCI6MTc0NDg5MTUwMH0.ILvHiRR0ctzykR9HkoZ4oYUV7TReo_0XAzd3wagRS0E
 
 {
     

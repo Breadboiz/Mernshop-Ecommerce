@@ -4,15 +4,15 @@ import {motion} from 'framer-motion'
 import { Key } from 'lucide-react'
 const Collections = () => { 
   const collections = [
-   { url:"/shop?type=women",
+   { url:"/shop?product_category=nữ",
     type:"Nữ",
      image: "../src/assets/women_watches.jpg"
    },
-   { url:"/shop?type=men",
+   { url:"/shop?product_category=nam",
     type:"Nam",
     image: "../src/assets/men_watches.jpg"
   },
-  { url:"/shop?type=unisex",
+  { url:"/shop?product_category=đôi",
     type:"Đôi",
     image: "../src/assets/women_watches.jpg"
   }

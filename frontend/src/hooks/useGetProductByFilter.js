@@ -1,31 +1,46 @@
-import { useEffect } from 'react';
+import { use, useEffect, useState } from 'react';
 import axiosInstance from '../lib/axios';
+import { useSearchParams } from 'react-router-dom';
 
 // Custom hook chỉ fetch dữ liệu
-const useGetProductByFilter = (filter, setProducts) => {
-  const { searchKeyword, selectedBrand, selectedCategory } = filter;
-
-  // Fetch products từ API khi các bộ lọc thay đổi
-  const fetchProducts = async () => {
+const useGetProductByFilter = () => {
+  const [products, setProducts] = useState([]);
+  const [loading, setloading] = useState(false);
+  const [searchParams] = useSearchParams();
+  const query = {}
+  for (const [key, value] of searchParams.entries()) {
+    query[key] = value;
+  }
+  const search =  searchParams.get('search') || ""
+  const offset = searchParams.get('page') || 1;
+  const limit = searchParams.get('limit') || 20
+  const {search: _search, offset: _offset, ...filterQuery} = query
+ 
+     const fetchProducts = async () => {
+    setloading(true);
     try {
       const response = await axiosInstance.get('/products', {
         params: {
-          name: searchKeyword || undefined,  // Sử dụng undefined để không gửi tham số khi không có giá trị
-          product_branch: selectedBrand || undefined,
-          category: selectedCategory || undefined,
-        }
+          search,
+          filter: filterQuery,
+          offset ,
+          limit
+        },
       });
-      setProducts(response.data);  // Cập nhật danh sách sản phẩm thông qua hàm setProducts
+      setProducts(response.data.metadata.products); 
     } catch (error) {
       console.error("Lỗi khi tìm sản phẩm:", error);
+    }finally{
+      setloading(false);
     }
   };
+  
+  
 
-  // Lấy dữ liệu khi các giá trị thay đổi
-  useEffect(() => {
-    fetchProducts();  // Gọi lại fetch mỗi khi có thay đổi trong các bộ lọc
-  }, [filter]);  // Chạy lại fetch khi đối tượng filter thay đổi
-
+  useEffect(() => { 
+    fetchProducts(); 
+}, [searchParams] )
+return  {loading, products, refesh: fetchProducts}
 };
 
 export default useGetProductByFilter;
