@@ -6,12 +6,10 @@ const generateTokens = require("../utils/generateTokens");
 const { createKeyToken } = require("./keyTokens.services");
 const keyTokenModel = require("../models/keyToken.models");
 
-// const roles = {
-//     customer: "CUST",
-//     admin: "AD"
-// }
 
-const registerService = async ({username, email, password, confirmPassword},res) =>{
+
+
+const registerService = async ({username, email, roles ,password, confirmPassword},res) =>{
     if(password !== confirmPassword){
         throw new BadRequestError("Password does not match");
     }
@@ -24,23 +22,29 @@ const registerService = async ({username, email, password, confirmPassword},res)
     const hashPassword = brcrypt.hashSync(password, salt);
     const newuser = new userModel({ username,
                                     email,
-                                    //roles: [roles.customer],
+                                    roles,
                                     password: hashPassword});
-    const tokens =  generateTokens({id:newuser._id,email: user.email ,role: newuser.roles});
+    const tokens =  generateTokens({id:newuser._id,email: newuser.email ,role: newuser.roles});
     await createKeyToken({userID: newuser._id, refreshToken: tokens.refreshToken});
     res.cookie('accessToken', tokens.accessToken, {
             httpOnly: true,  
             secure: process.env.NODE_ENV !== "dev" ,   
             sameSite: 'Strict', // Ngăn chặn CSRF
+            maxAge: 24 * 60 * 60 * 1000
         });
     res.cookie('refreshToken', tokens.refreshToken, {
             httpOnly: true,  
             secure: process.env.NODE_ENV !== "dev" ,   
             sameSite: 'Strict', // Ngăn chặn CSRF
+            maxAge: 24 * 60 * 60 * 1000 * 30
         });
     await newuser.save();
     return {
-        newuser
+        _id: newuser._id,
+        username: newuser.username,
+        email: newuser.email,
+        role: newuser.roles
+
     }
    }
                                     
@@ -61,19 +65,26 @@ const loginService = async ({email, password},res) => {
             httpOnly: true,  
             secure: process.env.NODE_ENV !== "dev" ,   
             sameSite: 'Strict', // Ngăn chặn CSRF
+            maxAge: 24 * 60 * 60 * 1000
         });
     res.cookie('refreshToken', tokens.refreshToken, {
             httpOnly: true,  
             secure: process.env.NODE_ENV !== "dev" ,   
             sameSite: 'Strict', // Ngăn chặn CSRF
+            maxAge: 24 * 60 * 60 * 1000 * 30
         });
     return {
-        user,
+        _id: user._id,
+        username: user.username,
+        email: user.email,
+        role: user.roles
+
     }
 }
 const logoutService = async (keyStore, res) => {
     const delKey = await keyTokenModel.deleteOne({user: keyStore.user});
     res.clearCookie('accessToken');
+    res.clearCookie('refreshToken');
     return delKey
 }
 const handleRefreshToken = async ({user,keyStore ,refreshToken},res) => {
@@ -97,11 +108,13 @@ const handleRefreshToken = async ({user,keyStore ,refreshToken},res) => {
         httpOnly: true,  
         secure: process.env.NODE_ENV !== "dev" ,   
         sameSite: 'Strict', // Ngăn chặn CSRF
+        maxAge: 24 * 60 * 60 * 1000
     });
     res.cookie('refreshToken', tokens.refreshToken, {
         httpOnly: true,  
         secure: process.env.NODE_ENV !== "dev" ,   
         sameSite: 'Strict', // Ngăn chặn CSRF
+        maxAge: 24 * 60 * 60 * 1000 * 30
     });
     return tokens
 }

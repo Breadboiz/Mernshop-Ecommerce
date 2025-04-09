@@ -1,20 +1,22 @@
 import { useState } from "react";
-import { Link } from "react-router-dom"; // Nếu dùng React Router
+import { Link, Links } from "react-router-dom"; // Nếu dùng React Router
 import { FaSearch, FaShoppingBasket, FaTimes, FaBars   } from "react-icons/fa";
 import {motion , AnimatePresence} from 'framer-motion';
 import {useAuthContext} from '../context/AuthContext'
 import  useLogout  from "../hooks/useLogout";
 import { TbLogout } from "react-icons/tb";
 import { GoPerson } from "react-icons/go";
+import { useNavigate } from "react-router-dom";
+import { AiOutlineProfile } from "react-icons/ai";
+import { MdDashboard } from "react-icons/md";
 
 const Navbar = () => {
     const [active, setActive] = useState("HOME");
     const [menuOpen, setMenuOpen] = useState(false);
     const {authUser} = useAuthContext();
-    const {searchKeyword,setSearchKeyword} = useAuthContext();
-    const {logout} = useLogout();  // Khi người dùng nhập vào input
-    const [inputValue, setInputValue] = useState(""); // State tạm cho ô input
-
+    const {logout} = useLogout();  
+    const [inputValue, setInputValue] = useState(""); 
+    const navigate = useNavigate();
     const handleInputChange = (event) => {
       setInputValue(event.target.value); // Chỉ cập nhật local inputValue
     };
@@ -22,11 +24,11 @@ const Navbar = () => {
     // Khi người dùng submit form
     const handleFormSubmit = (event) => {
       event.preventDefault(); // Không reload lại trang
-      setSearchKeyword(inputValue); // Chỉ cập nhật searchKeyword khi submit
+      navigate(`/shop?search=${inputValue}`);
     };
   return (
     <div>
-        <div className="flex items-center justify-between bg-white px-[2rem] lg:px-[6rem] py-2 border-b border-gray-200">
+        <div className="flex items-center justify-between  px-[2rem] lg:px-[6rem] py-2 border-b border-gray-200">
      {/* This button appears only on small screens    */}
     <button 
     className="lg:hidden text-2xl focus:outline-none"
@@ -85,7 +87,7 @@ const Navbar = () => {
         <div className="flex items-center justify-start">
 
              {/* Search form */}
-        <form
+        <form 
           className="h-[75%] flex items-center gap-2 px-4 border-r border-gray-500"
           onSubmit={handleFormSubmit}
         >
@@ -112,7 +114,8 @@ const Navbar = () => {
                         <div className="dropdown">
                             <div tabIndex={0} role="button" className="btn m-1">{authUser? authUser.username : <GoPerson/>}</div>
                             <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
-                                <li><a>Profile</a></li>
+                               {authUser.role === "AD" && <li><Link to="/admin-panel"><MdDashboard/> Dashboard</Link></li>}
+                               <li><button ><AiOutlineProfile/> Profile</button></li>
                                 <li><button onClick={
                                    logout
                                 }><TbLogout/> Logout</button></li>

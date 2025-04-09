@@ -12,7 +12,10 @@ dotenv.config();
 
 //init middleware
 app.use(express.json())
-app.use(cors());
+app.use(cors({
+    origin: "http://localhost:3000", // Domain frontend
+    credentials: true // Cho phép gửi cookie
+}));
 app.use(helmet());
 app.use(morgan('dev'));
 app.use(express.urlencoded({ extended: true }));

@@ -4,6 +4,7 @@ import axiosInstance from "../../lib/axios";
 import toast from "react-hot-toast";
 
 const CreateProductForm = () => {
+  const [loading, setloading] = useState(false);
   const [product, setProduct] = useState({
     product_name: "",
     product_brand: "",
@@ -40,7 +41,7 @@ const CreateProductForm = () => {
     if (thumbnailFile) {
       formData.append("product_image", thumbnailFile);
     }
-
+    setloading(true);
     try {
       const user = JSON.parse(localStorage.getItem("user"));
       const clientId = user._id;
@@ -65,6 +66,8 @@ const CreateProductForm = () => {
     } catch (error) {
       console.error("❌ Error creating product:", error);
       toast.error("Failed to create product.");
+    }finally {
+      setloading(false);
     }
   };
 
@@ -81,7 +84,7 @@ const CreateProductForm = () => {
         <input
           type="text"
           name="product_name"
-          value={product.product_name.trim()}
+          value={product.product_name}
           onChange={handleChange}
           className="w-full border p-2 rounded"
           required
@@ -129,8 +132,9 @@ const CreateProductForm = () => {
       <div>
         <label className="block mb-1">Description</label>
         <textarea
+        type="text"
           name="product_description"
-          value={product.product_description.trim()}
+          value={product.product_description}
           onChange={handleChange}
           className="w-full border p-2 rounded"
         ></textarea>
@@ -162,25 +166,15 @@ const CreateProductForm = () => {
         </select>
       </div>
 
-      {/* <div>
-        <label className="block mb-1">Rating</label>
-        <input
-          type="number"
-          name="rating"
-          value={product.rating}
-          onChange={handleChange}
-          className="w-full border p-2 rounded"
-          min={0}
-          max={5}
-          step={0.1}
-        />
-      </div> */}
-
       <button
+        disabled={loading}
         type="submit"
         className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
       >
-        Create Product
+        {
+          loading ? <span className="loading loading-dots loading-sm"></span>
+          : "Create Product"
+        }
       </button>
     </form>
   );

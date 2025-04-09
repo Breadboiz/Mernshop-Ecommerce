@@ -23,32 +23,41 @@ const protectRoutes = async (req, res, next) => {
     }
     }
      //if req has refreshtoken (only happen if accessToken exprise)
-   if(req.cookies.refreshToken){
-    try {
-        const refreshToken = req.cookies.refreshToken
-    const decodedUser =  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET)
-    if( userID !== decodedUser.id) throw new AuthFailedError("Refresh token expired or invalid");
-    req.keyStore = keyStore
-    req.user = decodedUser
-    req.refreshToken = refreshToken
-    return next()
-    } catch (error) {
-        throw error
-    }
-   } 
+  
 
     next();
 }
-const adminRoutes = (req, res, next) =>{
-    if(req.user && req.user.roles === 'AD'){
-        next();
-    }
-    else{
+
+const protectRefreshToken = async (req,res,next) =>{
+    const userID = req.headers['x-client-id']
+    const keyStore = await keyTokenModels.findOne({user: userID}).lean().exec();
+    if(!keyStore) throw new AuthFailedError('Invalid user when refresh token');
+    if(req.cookies.refreshToken){
+        try {
+            const refreshToken = req.cookies.refreshToken
+        const decodedUser =  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET)
+        if( userID !== decodedUser.id) throw new AuthFailedError("Refresh token expired or invalid! please login again");
+        req.keyStore = keyStore
+        req.user = decodedUser
+        req.refreshToken = refreshToken
+        return next()
+        } catch (error) {
+            throw error
+        }
+       } 
+       next()
+}
+
+const adminRoutes = async (req, res, next) =>{
+    // console.log(req.user);
+    if(!req.user || !req.user.role === 'AD'){
         throw new AuthFailedError('Access denied - Admin only');
     }
+    next()
 }
 
 module.exports = {
     protectRoutes,
+    protectRefreshToken,
     adminRoutes
 }
