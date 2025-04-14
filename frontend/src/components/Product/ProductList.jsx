@@ -1,5 +1,6 @@
 import React from 'react'
 import Product from './Product'
+import { Outlet } from 'react-router-dom'
 
 const ProductList = ({products}) => {
   return ( 
@@ -14,6 +15,7 @@ const ProductList = ({products}) => {
         
         
         </div>
+        <Outlet/>
     </div>
   )
 }

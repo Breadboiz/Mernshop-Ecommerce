@@ -2,56 +2,58 @@ import React, { useState } from 'react'
 import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
 import { BarChart, PlusCircleIcon, ShoppingBasket } from 'lucide-react';
-import CreateProductForm from '../../components/CreateProductForm/CreateProductForm';
-import AnalyticsTab from '../../components/AnalyticsTab/AnalyticsTab';
-import ManagementTab from '../../components/ManageProductTab/ManagementTab';
+import { Outlet } from 'react-router-dom';
 
+
+import { Link, useLocation } from 'react-router-dom';
 
 const AdminPage = () => {
-    const [activeTab, setActiveTab] = useState("create");
-    const tabs = [
-	{ id: "create", label: "Create Product", icon: PlusCircleIcon },
-	{ id: "products", label: "Products", icon: ShoppingBasket },
-	{ id: "analytics", label: "Analytics", icon: BarChart },
-];
+  const location = useLocation();
+
+  const tabs = [
+    { id: "create", label: "Create Product", icon: PlusCircleIcon, path: "/admin-panel/create" },
+    { id: "products", label: "Products", icon: ShoppingBasket, path: "/admin-panel/products" },
+    { id: "analytics", label: "Analytics", icon: BarChart, path: "/admin-panel/analytics" },
+  ];
 
   return (
-        <div className='flex flex-col flex-grow w-full h-auto absolute '>
-        <Navbar />
-        <div className='flex flex-col sm:flex-row w-full h-full '>
-          <div className='flex flex-col w-full sm:w-[20%] h-auto  items-center bg-slate-200'>
-          <div className='flex flex-col w-full h-full  py-10'>
-          <h2 className='text-xl font-bold mb-5 px-7'>Admin Dashboard</h2>
-          {
-            tabs.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center px-6 py-2   transition-colors duration-200 ${
-                  activeTab === tab.id
-                    ? "bg-slate-700 text-white"
-                    : " border-b border-gray-600 hover:bg-gray-600 text-black"
-                }`}
-              >
-                <tab.icon className='mr-2 h-5 w-5' />
-                {tab.label}
-              </button>
-            ))
-          }
-        </div> 
-          </div>
-          <div className='w-full sm:w-[80%] h-auto py-10'>
-          {activeTab === "create" && <CreateProductForm/>}
-          {activeTab === "products" && <ManagementTab/>}
- 		       {activeTab === "analytics" && <AnalyticsTab/>}
+    <div className='flex flex-col flex-grow w-full h-auto absolute'>
+      <Navbar />
+      <div className='flex flex-col sm:flex-row w-full h-full'>
+        <div className='flex flex-col w-full sm:w-[20%] h-auto items-center bg-slate-200'>
+          <div className='flex flex-col w-full h-full py-10'>
+            <h2 className='text-xl font-bold mb-5 px-7'>Admin Dashboard</h2>
+            {tabs.map((tab) => {
+              const isActive = location.pathname.includes(tab.id);
+              return (
+                <Link
+                  key={tab.id}
+                  to={tab.path}
+                  className={`flex items-center px-6 py-2 transition-colors duration-200 ${
+                    isActive
+                      ? "bg-slate-700 text-white"
+                      : "border-b border-gray-600 hover:bg-gray-600 text-black"
+                  }`}
+                >
+                  <tab.icon className='mr-2 h-5 w-5' />
+                  {tab.label}
+                </Link>
+              );
+            })}
           </div>
         </div>
-        <Footer />
-    </div>
- )
-}
 
-export default AdminPage
+        <div className='w-full sm:w-[80%] h-auto py-10'>
+          <Outlet />
+        </div>
+      </div>
+      <Footer />
+    </div>
+  );
+};
+
+export default AdminPage;
+
 
 // import { BarChart, PlusCircle, ShoppingBasket } from "lucide-react";
 // import { useEffect, useState } from "react";
