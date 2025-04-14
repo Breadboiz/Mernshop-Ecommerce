@@ -12,12 +12,13 @@ const storage = new CloudinaryStorage({
     cloudinary,
     params:{
         folder: '/MERNSHOP',
-        allowedFormats: ['jpg', 'png','jpeg'],
+        allowedFormats: ['jpg', 'png','jpeg', 'gif','webp'], 
     },
     filename: function(req,file,cb){
         cb(null, file.originalname)
     }
   });
+  
 module.exports = {
     storage,
     cloudinary

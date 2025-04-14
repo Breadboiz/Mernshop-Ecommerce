@@ -12,6 +12,7 @@
   "dependencies": {
     "@tailwindcss/vite": "^4.0.17",
     "axios": "^1.8.4",
+    "formik": "^2.4.6",
     "js-cookie": "^3.0.5",
     "lucide-react": "^0.485.0",
     "motion": "^12.6.2",
@@ -23,7 +24,8 @@
     "react-icons": "^5.5.0",
     "react-router-dom": "^7.4.1",
     "swiper": "^11.2.6",
-    "universal-cookie": "^8.0.1"
+    "universal-cookie": "^8.0.1",
+    "yup": "^1.6.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",

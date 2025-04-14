@@ -23,7 +23,7 @@ const Collections = () => {
         {
                  collections.map((collection, index) => (
                     
-                    <Link to={collection.url} Key={index} className='flex flex-col w-full md:w-[24em] md:h-[29rem] relative'>
+                    <Link to={collection.url} key={index} className='flex flex-col w-full md:w-[24em] md:h-[29rem] relative'>
                           <motion.img 
                           initial={{ opacity: 0  }}
                           animate={{ opacity: 1 }}

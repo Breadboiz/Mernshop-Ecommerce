@@ -13,7 +13,6 @@ const ShopPage = () => {
   const categories = ['nam', 'nữ','đôi']
 
   const {searchKeyword, setSearchKeyword} = useAuthContext();
-  console.log(searchKeyword);
   const [brands, setBrands] = useState([]); 
   //const [products, setProducts] = useState([]);
   const {products, loading } = useGetProductByFilter();
@@ -34,7 +33,7 @@ const ShopPage = () => {
   }, []);
 
 
-  console.log("products", products);
+ // console.log("products", products);
 
   return (
     <div className='flex flex-col flex-grow w-full h-full absolute '>
