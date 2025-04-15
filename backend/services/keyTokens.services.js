@@ -1,6 +1,6 @@
 'use strict'
 
-const keyTokenModel = require("../models/keyToken.models");
+const keyTokenModel = require("../models/keyToken.model");
 const { ErrorResponse } = require("../core/error.response");
 
 const createKeyToken = async ({userID,refreshToken}) => {

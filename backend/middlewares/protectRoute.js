@@ -1,6 +1,6 @@
 'use strict'
 const jwt = require('jsonwebtoken');
-const keyTokenModels = require('../models/keyToken.models');
+const keyTokenModels = require('../models/keyToken.model');
 const { AuthFailedError } = require('../core/error.response');
 
 const protectRoutes = async (req, res, next) => {
