@@ -4,7 +4,7 @@ const {ErrorResponse,AuthFailedError,BadRequestError, NotFoundError} = require("
 const brcrypt = require("bcryptjs");
 const generateTokens = require("../utils/generateTokens");
 const { createKeyToken } = require("./keyTokens.services");
-const keyTokenModel = require("../models/keyToken.models");
+const keyTokenModel = require("../models/keyToken.model");
 
 
 

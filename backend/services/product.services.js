@@ -1,8 +1,9 @@
 'use strict';
 
-const productModel = require("../models/product.models");
+const productModel = require("../models/product.model");
 const { NotFoundError ,BadRequestError } = require("../core/error.response");
 const { cloudinary } = require("../config/config.cloudinay");
+const { insertInventory } = require("./inventory.services");
 
 const createProductService = async (req) => {
   try {
@@ -65,6 +66,13 @@ const createProductService = async (req) => {
     const result = await product.save().catch((err) => console.log(err));
     if (!result) {
       throw new BadRequestError("Product not created");
+    }else{
+      await insertInventory({
+        inventory_id: result._id,
+       // inventory_location: "unknown",
+        inventory_stock: product_inStock,
+        inventory_resavtion: 0
+      })
     }
     return result;
 
