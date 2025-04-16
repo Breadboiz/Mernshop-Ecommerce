@@ -42,7 +42,12 @@ const createProductService = async (req) => {
 
     // Thumbnail
 
-
+      const findProduct = await productModel.findOne({
+        product_name
+      })
+      if(findProduct){
+        throw new BadRequestError("Product already exists")
+      }
     const product = new productModel({
       product_name,
       product_brand,
@@ -64,14 +69,14 @@ const createProductService = async (req) => {
     });
 
     const result = await product.save().catch((err) => console.log(err));
+    console.log(result);
     if (!result) {
       throw new BadRequestError("Product not created");
     }else{
       await insertInventory({
-        inventory_id: result._id,
-       // inventory_location: "unknown",
-        inventory_stock: product_inStock,
-        inventory_resavtion: 0
+        inventory_product_id: result._id,
+        inventory_stock: result.product_inStock,
+
       })
     }
     return result;

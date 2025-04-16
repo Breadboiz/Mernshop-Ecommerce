@@ -5,7 +5,7 @@ const COLLECTION_NAME = 'inventories';
 
 // Declare the Schema of the Mongo model
 const inventorySchema = Schema({
-    inventory_id:{
+    inventory_product_id:{
         type: Schema.Types.ObjectId,
         ref: 'product'
     },
@@ -19,7 +19,7 @@ const inventorySchema = Schema({
         required: true,
         min: 0
     },
-    inventory_resavtion:{
+    inventory_reservation:{
         type: Array,
         default: []
     }
