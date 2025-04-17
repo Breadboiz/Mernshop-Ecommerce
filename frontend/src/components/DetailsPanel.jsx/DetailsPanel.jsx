@@ -2,13 +2,15 @@ import React, { useEffect, useRef, useState } from 'react'
 import { TiTickOutline } from "react-icons/ti";
 import {Check} from "lucide-react"
 import SpecificationTab from '../DetailsTab/SpecificationTab';
-const DetailsPanel = ({product}) => {
+import axiosInstance from '../../lib/axios';
+import toast from 'react-hot-toast';
+
+const DetailsPanel = ({product,user }) => {
+    const [loading, setLoading] = useState(false);
     const [selectedImage, setSelectedImage] = useState(0);
     const [quantity, setQuantity] = useState(0);
     const timeRef = useRef(null);
-    const images = Array.isArray(product?.product_images) ? product.product_images : [];
-    console.log("product", images.length);
-   
+    const images = Array.isArray(product?.product_images) ? product.product_images : [];   
     useEffect(() => {
         // Tự động chuyển ảnh
         timeRef.current = setInterval(() => {
@@ -33,8 +35,34 @@ const DetailsPanel = ({product}) => {
     const handleChange = (e) => {
       const val = Math.max(0, parseInt(e.target.value) || 0);
       setQuantity(val);
-      onChange?.(val);
     };
+    const handleAddToCart = async () => {
+        // Xử lý khi người dùng thêm sản phẩm vào giỏ hàng  
+        const productToAdd = {
+          productID: product._id,
+          quantity,
+          ...product 
+          }
+          setLoading(true)
+          try {
+              
+              const userID = user._id
+              const response = await axiosInstance.post("/cart",
+                                                         {userID, product: productToAdd},
+                                                         {headers: {
+                                                          "x-client-id": userID,
+                                                        },
+                                                          withCredentials: true})
+
+                
+              toast.success(response.data.message);
+          } catch (error) {
+              toast.error(error.message);
+          }finally{
+              setLoading(false)
+          }
+            
+      }
   return (
     <div className='flex flex-col lg:flex-row gap-10 px-6 lg:px-[15rem] my-10   '>
                     <div className='w-full lg:w-[60%] py-5  '>
@@ -73,25 +101,25 @@ const DetailsPanel = ({product}) => {
                 <div className='text-2xl font-bold '>{product?.product_name}</div>
                 <div className='flex items-center justify-between'>
             
-                    <div className="rating rating-lg rating-half">
+                    <div className="rating rating-lg rating-half" >
                         <input type="radio" name="rating-11" className="rating-hidden" />
-                        <input type="radio" name="rating-11" className="mask mask-star-2 mask-half-1 bg-amber-500" aria-label="0.5 star" />
-                        <input type="radio" name="rating-11" className="mask mask-star-2 mask-half-2 bg-amber-500" aria-label="1 star" />
-                        <input type="radio" name="rating-11" className="mask mask-star-2 mask-half-1 bg-amber-500" aria-label="1.5 star" defaultChecked />
-                        <input type="radio" name="rating-11" className="mask mask-star-2 mask-half-2 bg-amber-500" aria-label="2 star" />
-                        <input type="radio" name="rating-11" className="mask mask-star-2 mask-half-1 bg-amber-500" aria-label="2.5 star" />
-                        <input type="radio" name="rating-11" className="mask mask-star-2 mask-half-2 bg-amber-500" aria-label="3 star" />
-                        <input type="radio" name="rating-11" className="mask mask-star-2 mask-half-1 bg-amber-500" aria-label="3.5 star" />
-                        <input type="radio" name="rating-11" className="mask mask-star-2 mask-half-2 bg-amber-500" aria-label="4 star" />
-                        <input type="radio" name="rating-11" className="mask mask-star-2 mask-half-1 bg-amber-500" aria-label="4.5 star" />
-                        <input type="radio" name="rating-11" className="mask mask-star-2 mask-half-2 bg-amber-500" aria-label="5 star" />
+                        <input type="radio" name="rating-11" className="mask mask-star-2 mask-half-1 bg-amber-500" disabled aria-label="0.5 star" />
+                        <input type="radio" name="rating-11" className="mask mask-star-2 mask-half-2 bg-amber-500" disabled aria-label="1 star" />
+                        <input type="radio" name="rating-11" className="mask mask-star-2 mask-half-1 bg-amber-500" disabled aria-label="1.5 star" defaultChecked/>
+                        <input type="radio" name="rating-11" className="mask mask-star-2 mask-half-2 bg-amber-500" disabled aria-label="2 star" />
+                        <input type="radio" name="rating-11" className="mask mask-star-2 mask-half-1 bg-amber-500" disabled aria-label="2.5 star" />
+                        <input type="radio" name="rating-11" className="mask mask-star-2 mask-half-2 bg-amber-500" disabled aria-label="3 star" />
+                        <input type="radio" name="rating-11" className="mask mask-star-2 mask-half-1 bg-amber-500" disabled aria-label="3.5 star" />
+                        <input type="radio" name="rating-11" className="mask mask-star-2 mask-half-2 bg-amber-500" disabled aria-label="4 star" />
+                        <input type="radio" name="rating-11" className="mask mask-star-2 mask-half-1 bg-amber-500" disabled aria-label="4.5 star" />
+                        <input type="radio" name="rating-11" className="mask mask-star-2 mask-half-2 bg-amber-500" disabled aria-label="5 star" />
                         </div>
                 
                 <div className='text-sm font-semibold text-gray-500'>5 reviews</div>
                 </div>
                 <div className='flex items-center justify-between'>
                 <div className='line-through'>{ product?.product_price.toLocaleString('vi')} VND</div> 
-                <div className=''>{ product?.product_price.toLocaleString('vi')} VND</div> 
+                <div className=''>{ product?.product_price.toLocaleString('vi')} đ</div> 
                 </div>
                
                {product?.product_inStock > 0 &&   <span className='flex text-sm font-thin text-green-500  px-2 py-2 rounded-xl w-fit'><Check className='mr-2 pb-1'/>Còn hàng</span>}
@@ -121,7 +149,7 @@ const DetailsPanel = ({product}) => {
                 </button>
                 </div>
                 {/* CArt */}
-               <button className='px-5 py-2 bg-black text-white  rounded-3xl'>Add to cart</button>
+               <button className='px-5 py-2 bg-black text-white  rounded-3xl' disabled={quantity === 0} onClick={handleAddToCart}>Add to cart</button>
                </div>
                <SpecificationTab product={product}/>
                     </div>

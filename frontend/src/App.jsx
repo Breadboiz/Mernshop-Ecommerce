@@ -14,6 +14,7 @@ import ProductDetailsPage from './pages/Product-details/ProductDetailsPage';
 import CreateProductForm from './components/CreateProductForm/CreateProductForm';
 import ManagementTab from './components/ManageProductTab/ManagementTab';
 import AnalyticsTab from './components/AnalyticsTab/AnalyticsTab';
+import CartPage from './pages/CartPage/CartPage';
 function App() {
   const {authUser} = useAuthContext()
   return (
@@ -32,6 +33,7 @@ function App() {
                 <Route path="analytics" element={<AnalyticsTab />} />
                 <Route path="update/:id" element={<UpdateProductForm />} />
               </Route>
+              <Route path="/cart/:id"  element={ authUser ?  <CartPage />: <Navigate to="/" /> }></Route>
             <Route path="*" element={<NoPage/>}></Route>
           </Routes>
       <Toaster/>    

@@ -5,9 +5,10 @@ import useGetOneProduct from '../../hooks/useGetOneProduct'
 import DetailsPanel from '../../components/DetailsPanel.jsx/DetailsPanel'
 import DetailsTab from '../../components/DetailsTab/DetailsTab'
 import PopularProduct from '../../components/PopularProduct'
-
+import { useAuthContext } from '../../context/AuthContext';
 //import { authUser} from '../../context/AuthContext'; 
 const ProductDetailsPage = () => {
+  const { authUser } = useAuthContext();
   const {product, loading } = useGetOneProduct();
   if (loading || !product || !product.product_images) {
     return (
@@ -16,12 +17,11 @@ const ProductDetailsPage = () => {
       </div>
     );
   }
-  console.log("product", product); //in ra 4 4 lần, 2 lần rỗng
   return (
     <div className='flex flex-col flex-grow w-full  min-h-screen absolute scroll-smooth'>
         <Navbar />
-        {loading?<h1>Loading...</h1>:<DetailsPanel product={product}/>}
-        <DetailsTab product={product}/>
+        {loading?<h1>Loading...</h1>:<DetailsPanel product={product} user={authUser}/>}
+        <DetailsTab product={product} />
         <PopularProduct/>
         <Footer />
     </div>

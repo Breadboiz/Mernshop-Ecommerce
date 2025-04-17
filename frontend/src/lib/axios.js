@@ -20,7 +20,7 @@ axiosInstance.interceptors.response.use(
             console.log("Token expired, refreshing...");
             const user = JSON.parse(localStorage.getItem("user"));
             const clientId = user._id;
-            const resp = await axiosInstance.post("/auth/refreshtoken", {} , {
+            await axiosInstance.post("/auth/refreshtoken", {} , {
                 headers: {
                     "x-client-id": clientId,
                 },
