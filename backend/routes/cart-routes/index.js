@@ -7,10 +7,9 @@ const {protectRoutes, protectRefreshToken} = require('../../middlewares/protectR
 const {addToCart, updateCart, deleteCart, getCart} = require('../../controller/cart.controller');
 
 
-
-router.post('',asyncHandler(addToCart));
-router.put('/update' ,asyncHandler(updateCart));
-router.delete('' ,asyncHandler(deleteCart));
-router.get('' ,asyncHandler(getCart));
+router.get('',asyncHandler(protectRoutes) ,asyncHandler(getCart));
+router.post('',asyncHandler(protectRoutes),asyncHandler(addToCart));
+router.put('/update',asyncHandler(protectRoutes) ,asyncHandler(updateCart));
+router.delete('',asyncHandler(protectRoutes) ,asyncHandler(deleteCart));
 
 module.exports = router; 

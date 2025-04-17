@@ -12,7 +12,6 @@ const useGetOneProduct = () => {
     setloading(true);
     try {
       const response = await axiosInstance.get(`/products/product/${params}`);
-      console.log(response.data.metadata);
       setProduct(response.data.metadata); 
     } catch (error) {
       console.error("Lỗi khi tìm sản phẩm:", error);

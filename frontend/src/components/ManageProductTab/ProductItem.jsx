@@ -12,7 +12,7 @@ const ProductItem = ({index, product, cb}) => {
     <li className='flex w-full h-[7rem] items-center px-2 sm:px-10 justify-between border-b border-gray-200'>
         <div className='flex items-center h-full '>
         <div className="text-4xl font-thin opacity-30 tabular-nums ">{index}</div>
-        <div className='w-[10rem]'     onClick={() => navigate(`/shop/${product.slug}`)}
+        <div className='w-[10rem]' onClick={() => navigate(`/shop/${product.slug}`)}
         ><img className="size-20 rounded-box cursor-pointer" src={product.product_thumbnail.url} alt=""  /></div>
         <div className="list-col-grow gap-5">
             <div>{product.product_name}</div>

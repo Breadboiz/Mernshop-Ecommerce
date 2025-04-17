@@ -10,12 +10,6 @@ const mongoose = require('mongoose');
  * @param {string} id 
  * @returns {mongoose.Types.ObjectId}
  */
-const toObjectId = (id) => {
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    throw new Error(`❌ ID không hợp lệ: ${id}`);
-  }
-  return new mongoose.Types.ObjectId(id);
-};
 
 
 const createUserCart= async ({ userID,  product}) => {
@@ -76,7 +70,8 @@ const addToCartServiceV2 = async ({userID, user_order}) => {
     const foundProduct = await productModel.findById(productID);
     if(!foundProduct) throw new NotFoundError("Product not found");
     if(quantity <= 0) {
-        //delete
+        console.log("delete cuz quantity <= 0");
+        return await deleteUserCartService({userID, productID});
     };
     return await updateQuantity({userID, product:{
         productID,

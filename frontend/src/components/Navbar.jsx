@@ -9,7 +9,6 @@ import { GoPerson } from "react-icons/go";
 import { useNavigate } from "react-router-dom";
 import { AiOutlineProfile } from "react-icons/ai";
 import { MdDashboard } from "react-icons/md";
-
 const Navbar = () => {
     const [active, setActive] = useState("HOME");
     const [menuOpen, setMenuOpen] = useState(false);
@@ -123,7 +122,7 @@ const Navbar = () => {
                             </div>
                         <div className="flex items-center justify-center w-10 h-10 bg-black rounded-full relative cursor-pointer  lg:ml-10 ">
                         <div>
-                        <FaShoppingBasket className="text-white"/>
+                        <FaShoppingBasket className="text-white" onClick={() => navigate( `/cart/${authUser._id}`)}/>
                         <span className="absolute top-0 right-0 w-4 h-4 text-white bg-gray-500 rounded-full flex items-center justify-center text-sm">1</span>
                         </div>
                     </div>
