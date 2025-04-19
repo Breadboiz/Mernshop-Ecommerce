@@ -29,7 +29,29 @@ const reservationInventory = async ({productID, quantity, cartID}) => {
     options = {upsert: true, new: true}
     return await inventoryModel.findOneAndUpdate(query, updateSet, options);    
 }
+const updateInventoryQuantity = async ( productID, req ) => {
+    const { quantity } = req.body;
+    const query = {
+      inventory_product_id: productID
+    };
+  
+    const updateSet = {
+      $set: {
+        inventory_stock: quantity 
+      }
+    };
+  
+    const options = { new: true };
+  
+    const updatedInventory = await inventoryModel.findOneAndUpdate(query, updateSet, options);
+    if (!updatedInventory) {
+      throw new Error("Không tìm thấy tồn kho để cập nhật");
+    }
+    return updatedInventory;
+  };
+  
 module.exports = {
     insertInventory,
-    reservationInventory
+    reservationInventory,
+    updateInventoryQuantity
 }

@@ -18,6 +18,7 @@ import CartPage from './pages/CartPage/CartPage';
 import UsersmanagementTab from './components/UsersmanagementTab/UsersmanagementTab';
 import OrderManagementTab from './components/OrderManagementTab/OrderManagementTab';
 import CheckoutPage from './pages/CheckoutPage/CheckoutPage';
+import UserDashBoard from './pages/UserDashBoard/UserDashBoard';
 function App() {
   const {authUser} = useAuthContext()
   return (
@@ -40,6 +41,9 @@ function App() {
               </Route>
               <Route path="/cart/:id"  element={ authUser ?  <CartPage />: <Navigate to="/" /> }></Route>
               <Route path='/checkout/:cartID' element={ authUser ?  <CheckoutPage/>: <Navigate to="/" />}></Route>
+              <Route path="/dashboard"   element={authUser? <UserDashBoard/>: <Navigate to="/" />}>
+                  
+              </Route>
             <Route path="*" element={<NoPage/>}></Route>
           </Routes>
       <Toaster/>    

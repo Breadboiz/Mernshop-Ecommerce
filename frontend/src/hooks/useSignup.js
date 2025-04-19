@@ -20,7 +20,7 @@ const useSignup = () => {
             const data = await response.data
             const message = data.message
            
-                setAuthUser(data)
+                setAuthUser(data.metadata)
                 localStorage.setItem("user", JSON.stringify(data.metadata))
                 toast.success(message)
             

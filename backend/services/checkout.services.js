@@ -3,7 +3,9 @@
 const cartModel = require("../models/cart.model");
 const productModel = require("../models/product.model");
 const inventoryModel = require("../models/inventory.model");
+const orderModel = require("../models/order.model");
 const { NotFoundError, BadRequestError } = require("../core/error.response");
+const { default: mongoose } = require("mongoose");
 
 const checkProductByServer = async (productID, quantity,product_thumbnail) => {
   const foundProduct = await productModel.findById(productID);
@@ -58,48 +60,72 @@ const checkoutReviewService = async ({cartID}) => {
 };
 
 
-const orderByUser = async ({ user_order, cartID, userID, payment, address }) => {
-  // 1. Gọi review để xác thực dữ liệu & tính toán tổng giá
-  const reviewResult = await checkoutReview({
-    userID,
-    cartID,
-    user_order
-  });
+const orderService = async (payload) => {
+  const {
+    order_user_id,
+    order_username,
+    order_phone,
+    order_shipping,
+    order_payment,
+    order_checkout,
+    order_products
+  } = payload;
 
-  // 2. Tạo dữ liệu đơn hàng
-  const newOrder = await orderModel.create({
-    order_user_id: userID,
-    order_products: reviewResult.products,
-    order_checkout: {
-      totalPrice: reviewResult.totalPrice,
-      totalApplyDiscount: reviewResult.discount,
-      shippingFee: reviewResult.shippingFee
-    },
-    order_shipping: {
-      street: address?.street || '',
-      ward: address?.ward || '',
-      district: address?.district || '',
-      city: address?.city || '',
-      country: address?.country || 'Vietnam'
-    },
-    order_payment: {
-      paymentMethod: payment?.method || 'COD',
-      paymentStatus: payment?.status || 'pending'
-    },
-    order_status: 'pending'
-  });
+  try {
+    const validatedProducts = [];
 
-  // 3. (Optional) Cập nhật trạng thái giỏ hàng
-  await cartModel.findByIdAndUpdate(cartID, {
-    cart_state: 'completed'
-  });
+    for (const item of order_products) {
+      const { productID, quantity, product_thumbnail } = item;
 
-  // 4. Trả về thông tin order đã tạo
-  return {
-    message: 'Đặt hàng thành công',
-    order: newOrder
-  };
+      const foundProduct = await productModel.findById(productID);
+      if (!foundProduct) {
+        throw new NotFoundError(`Không tìm thấy sản phẩm với ID: ${productID}`);
+      }
+
+      const inventory = await inventoryModel.findOne({ inventory_product_id: productID });
+      if (!inventory || inventory.inventory_stock < quantity) {
+        throw new BadRequestError(`Sản phẩm '${foundProduct.product_name}' không đủ tồn kho`);
+      }
+
+      // Trừ tồn kho
+      inventory.inventory_stock -= quantity;
+      await inventory.save();
+
+      validatedProducts.push({
+        productID,
+        product_name: foundProduct.product_name,
+        price: foundProduct.product_price,
+        quantity,
+        product_thumbnail,
+        rawPrice: foundProduct.product_price * quantity
+      });
+    }
+
+    // Tạo đơn hàng
+    const newOrder = await orderModel.create({
+      order_user_id,
+      order_username,
+      order_phone,
+      order_shipping,
+      order_payment,
+      order_checkout,
+      order_products: validatedProducts,
+      order_status: "pending"
+    });
+
+    // Xoá giỏ hàng của user sau khi đặt hàng
+    if(newOrder){
+      console.log("delete cart");
+      await cartModel.findOneAndDelete({ cart_user: order_user_id });
+    }
+
+    return newOrder;
+  } catch (err) {
+    throw err;
+  }
 };
+
+
 
 const getOrderByUser = async (userID) => {
   const orders = await orderModel.find({ order_user_id: userID });
@@ -123,7 +149,8 @@ const cancelOrder = async (orderID) => {
 };  
 
 module.exports = {
-  checkoutReviewService
+  checkoutReviewService,
+  orderService
 };
 
 

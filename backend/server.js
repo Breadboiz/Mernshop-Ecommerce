@@ -23,7 +23,7 @@ app.use(cookieParser());
 app.use(compression())
 
 //init database
-//checkOverload(); //hiển thị số lượng kết nố, dung lượng với cơ sở dữ liệu
+checkOverload(); //hiển thị số lượng kết nố, dung lượng với cơ sở dữ liệu
 require('./db/connect.mongodb');
 
 //init routes

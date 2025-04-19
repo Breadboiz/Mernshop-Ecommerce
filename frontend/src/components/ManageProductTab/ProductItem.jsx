@@ -14,10 +14,10 @@ const ProductItem = ({ index, product, cb }) => {
     try {
       const user = JSON.parse(localStorage.getItem("user"));
       const clientId = user?._id;
-
+      console.log("newVal", newVal);
       await axiosInstance.put(
-        `/products/updateProduct/${product._id}`,
-        { product_inStock: newVal },
+        `/inventory/${product._id}`,
+        { quantity: newVal },
         {
           headers: {
             "Content-Type": "application/json",
