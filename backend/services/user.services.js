@@ -15,9 +15,17 @@ const getUserByID = async (id) => {
 }
 
 const updateUserInfo = async ({id, data}) => {
-    const {address, phone, email} = data;
-    const user = await userModel.findByIdAndUpdate(id, {address, phone, email}, { new: true });
-    return user;
+    const {address, phone} = data;
+    const user = await userModel.findByIdAndUpdate(id, {address, phone}, { new: true });
+    return {
+        _id: user._id,
+        username: user.username,
+        email: user.email,
+        profilePic: user.profilePic,
+        role: user.roles,
+        phone: user.phone,
+        address: user.address
+    }
 }
 
 const updateUserstatus = async ({id, status}) => {

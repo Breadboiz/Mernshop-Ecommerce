@@ -151,7 +151,7 @@ const DetailsPanel = ({product,user }) => {
                 </div>
                 {/* CArt */}
                 {authUser && <button className='px-5 py-2 bg-black text-white  rounded-3xl' disabled={quantity === 0} onClick={()=>{
-                    quantity < product.product_inStock ? handleAddToCart() : toast.error("Sản phẩm vượt quá lượng hàng trong kho")
+                    quantity <= product.product_inStock ? handleAddToCart() : toast.error("Sản phẩm vượt quá lượng hàng trong kho")
                 }}>Add to cart</button>
             }
                </div>

@@ -38,8 +38,9 @@ const userSchema = new Schema({
         default:""
     },
     address: {
-        type: String,
-        default:""
+        type: Object,
+        required: true,
+        default: {}
     },
     phone: {
         type: String,

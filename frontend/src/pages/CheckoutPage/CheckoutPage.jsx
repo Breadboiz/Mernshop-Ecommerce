@@ -3,18 +3,22 @@ import { useParams } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import useGetCheckoutReview from '../../hooks/useGetCheckoutReview';
-
+import { useAuthContext } from '../../context/AuthContext';
+import axiosInstance from '../../lib/axios';
+import toast from 'react-hot-toast';
 const CheckoutPage = () => {
+  const {authUser} = useAuthContext();
   const { cartID } = useParams();
   const { checkoutReview, loading } = useGetCheckoutReview(cartID);
-
+  console.log(authUser);
   const [formData, setFormData] = useState({
+    phone: authUser.phone,
     shipping: {
-      street: '',
-      ward: '',
-      district: '',
-      city: '',
-      country: '',
+      street: authUser.address.street,
+      ward: authUser.address.ward,
+      district: authUser.address.district,
+      city: authUser.address.city,
+      country: authUser.address.country,
     },
     payment: {
       paymentMethod: 'cod',
@@ -52,16 +56,31 @@ const CheckoutPage = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const payload = {
-      order_user_id: 'USER_ID', // Replace with real user ID
+      order_username: authUser.username,
+      order_phone: formData.phone,
+      order_user_id: authUser._id, // Replace with real user ID
       order_shipping: formData.shipping,
       order_payment: formData.payment,
       order_checkout: formData.checkoutSummary,
       order_products: formData.products,
     };
     console.log('Order Payload:', payload);
+    try {
+      const userID= authUser._id;
+      console.log(userID);
+      const res = await axiosInstance.post('/order', payload, {
+        headers: {
+          "x-client-id": userID
+        },
+        withCredentials: true
+      })
+      toast.success(res.data.message);
+    } catch (error) {
+      console.error('Lỗi khi đặt hàng:', error);
+    }
     // Gửi payload lên server ở đây nếu cần
   };
 
@@ -73,7 +92,7 @@ const CheckoutPage = () => {
 
   // if (loading) return <div>Đang tải dữ liệu...</div>;
   // if (!checkoutReview) return <div>Không có dữ liệu</div>;
-  console.log("checkoutReview", checkoutReview);
+  // console.log("checkoutReview", checkoutReview);
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
       <Navbar />
@@ -83,8 +102,8 @@ const CheckoutPage = () => {
         <div className="lg:col-span-2 space-y-6">
           {/* Shipping Info */}
           <Section title="Thông tin giao hàng">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {['street', 'ward', 'district', 'city', 'country'].map((field) => (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              {['street', 'ward', 'district', 'city'].map((field) => (
                 <input
                   key={field}
                   type="text"
@@ -95,6 +114,23 @@ const CheckoutPage = () => {
                   required
                 />
               ))}
+            </div>
+            <div>
+            <input
+                  type="tel"
+                  pattern="[0-9]*"
+                  inputMode="numeric"
+                  maxLength={11}
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2"
+                  placeholder="Số điện thoại người nhận"
+                  value={formData.phone}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (/^\d*$/.test(value)) {
+                      handleInputChange('shipping', 'phone', value);
+                    }
+                  }}
+                />
             </div>
           </Section>
 

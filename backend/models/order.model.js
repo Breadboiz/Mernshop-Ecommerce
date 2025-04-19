@@ -1,60 +1,40 @@
-const { Schema, model } = require('mongoose');
+const mongoose = require('mongoose');
 
-const COLLECTION_NAME = 'orders';
-const DOCUMENT_NAME = 'order';
+const orderSchema = new mongoose.Schema({
+  order_user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  order_username: String,
+  order_phone: String,
+  order_shipping: {
+    street: String,
+    ward: String,
+    district: String,
+    city: String,
+    country: String
+  },
+  order_payment: {
+    paymentMethod: { type: String, enum: ['cod', 'banking'] },
+    paymentStatus: { type: String, enum: ['unpaid', 'paid'], default: 'unpaid' }
+  },
+  order_checkout: {
+    totalPrice: Number,
+    totalApplyDiscount: Number,
+    shippingFee: Number
+  },
+  order_products: [
+    {
+      productID: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
+      product_name: String,
+      price: Number,
+      quantity: Number,
+      rawPrice: Number,
+      product_thumbnail: {
+        url: String,
+        public_id: String
+      }
+    }
+  ],
+  order_status: { type: String, enum: ['pending', 'completed', 'cancelled'], default: 'processing' },
+  createdAt: { type: Date, default: Date.now }
+});
 
-const orderSchema = new Schema({
-    order_user_id: {
-        type: Schema.Types.ObjectId,
-        ref: 'user',
-        required: true
-    },
-    order_checkout: {
-        type: Object,
-        required: true,
-        default: {}
-        /*
-        order_checkout{
-            totalPrice,
-            totalApplyDiscount,
-            shippingFee, //from checkout serrvice
-        }
-        */
-    },
-    order_shipping: {
-        type: Object,
-        required: true,
-        default: {}
-        /*
-        street,
-        ward,
-        district,
-        city,
-        country
-        */
-    },
-    order_payment: {
-        type: Object,
-        required: true,
-        default: {}
-        /*
-        paymentMethod,
-        paymentStatus
-        */
-    },
-    order_products: {
-        type: Array,
-        required: true,
-        default: [] //from checkout service
-    },
-    order_status: {
-        type: String,
-        required: true,
-        enum: ['pending', 'completed','shiiped','delivered', 'cancelled'],
-        default: 'pending'
-}},{
-    timestamps: true,
-    collection: COLLECTION_NAME
-})
-//Export the model
-module.exports = model(DOCUMENT_NAME, orderSchema);
+module.exports = mongoose.model('Order', orderSchema);

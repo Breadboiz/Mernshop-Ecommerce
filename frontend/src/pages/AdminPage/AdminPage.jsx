@@ -19,10 +19,10 @@ const AdminPage = () => {
   ];
 
   return (
-    <div className='flex flex-col flex-grow w-full h-auto absolute'>
+    <div className='flex flex-col flex-grow w-full  min-h-screen absolute scroll-smooth '>
       <Navbar />
-      <div className='flex flex-col sm:flex-row w-full h-full'>
-        <div className='flex flex-col w-full sm:w-[20%] h-auto items-center bg-slate-200'>
+      <div className='flex flex-col sm:flex-row w-full min-h-screen  px-1 sm:px-[7rem]'>
+        <div className='flex flex-col w-full sm:w-[25%] h-auto items-center '>
           <div className='flex flex-col w-full h-full py-10'>
             <h2 className='text-xl font-bold mb-5 px-7'>Admin Dashboard</h2>
             {tabs.map((tab) => {
@@ -45,7 +45,7 @@ const AdminPage = () => {
           </div>
         </div>
 
-        <div className='w-full sm:w-[80%] h-auto py-10'>
+        <div className='w-full sm:w-[75%] h-auto py-10'>
           <Outlet />
         </div>
       </div>

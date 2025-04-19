@@ -11,7 +11,7 @@ const useDeleteCartItem = () => {
       const user = JSON.parse(localStorage.getItem('user'));
       const userID = user._id;
         console.log(userID);
-      const res = await axiosInstance.delete(`cart/`,{
+        const res = await axiosInstance.delete(`cart/`,{
         data: {
             userID: userID,
             productID: id

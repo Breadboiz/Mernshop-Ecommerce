@@ -5,6 +5,7 @@ const brcrypt = require("bcryptjs");
 const generateTokens = require("../utils/generateTokens");
 const { createKeyToken } = require("./keyTokens.services");
 const keyTokenModel = require("../models/keyToken.model");
+const { address } = require("ip");
 
 
 
@@ -46,8 +47,9 @@ const registerService = async ({username, email, roles ,password, confirmPasswor
         username: newuser.username,
         profilePic: newuser.profilePic,
         email: newuser.email,
-        role: newuser.roles
-
+        role: newuser.roles,
+        phone: newuser.phone,
+        address: newuser.address
     }
    }
                                     
@@ -68,21 +70,22 @@ const loginService = async ({email, password},res) => {
             httpOnly: true,  
             secure: process.env.NODE_ENV !== "dev" ,   
             sameSite: 'Strict', // Ngăn chặn CSRF
-            maxAge: 24 * 60 * 60 * 1000
+            maxAge: 24 * 60 * 60 * 1000 * 15
         });
     res.cookie('refreshToken', tokens.refreshToken, {
             httpOnly: true,  
             secure: process.env.NODE_ENV !== "dev" ,   
             sameSite: 'Strict', // Ngăn chặn CSRF
-            maxAge: 24 * 60 * 60 * 1000 * 30
+            maxAge: 24 * 60 * 60 * 1000 * 60
         });
     return {
         _id: user._id,
         username: user.username,
         email: user.email,
         profilePic: user.profilePic,
-        role: user.roles
-
+        role: user.roles,
+        phone: user.phone,
+        address: user.address
     }
 }
 const logoutService = async (keyStore, res) => {
