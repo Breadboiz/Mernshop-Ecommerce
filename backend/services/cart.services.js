@@ -10,18 +10,6 @@ const mongoose = require('mongoose');
  * @param {string} id 
  * @returns {mongoose.Types.ObjectId}
  */
-
-
-const createUserCart= async ({ userID,  product}) => {
-    console.log(product);
-    const query = {cart_user: userID, cart_state: "active"},
-    updateOrInsert = {
-        $addToSet: {
-            cart_products: product
-        }
-    }, options = {upsert: true, new: true}
-    return await cartModel.findOneAndUpdate(query, updateOrInsert, options);
-}
 const updateQuantity = async ({userID, product}) => {
     const { quantity,productID} = product;
     console.log(product);
@@ -38,6 +26,18 @@ const updateQuantity = async ({userID, product}) => {
     if(!result) throw new NotFoundError("Cart not found");
     return result;
 }
+
+const createUserCart= async ({ userID,  product}) => {
+   // console.log(product);
+    const query = {cart_user: userID, cart_state: "active"},
+    updateOrInsert = {
+        $addToSet: {
+            cart_products: product
+        }
+    }, options = {upsert: true, new: true}
+    return await cartModel.findOneAndUpdate(query, updateOrInsert, options);
+}
+
 //add product to cart
 const addToCartService = async ({ userID, product }) => {
     const userCart = await cartModel.findOne({ cart_user: userID, cart_state: "active" });
@@ -107,7 +107,7 @@ const deleteUserCartService = async ({userID, productID}) => {
     }
 */
 const getListCartService = async ({userID}) => {
-    console.log(userID);
+  //  console.log(userID);
     const query = {cart_user: userID, cart_state: "active"};
     return await cartModel.findOne(query);
 }

@@ -27,6 +27,23 @@ const userSchema = new Schema({
         type: String,
         enums: ['CUST', 'AD'],
         default: 'CUST'
+    },
+    status: {
+        type: String,
+        enums: ['active', 'inactive'],
+        default: 'active'
+    },
+    profilePic:{
+        type: String,
+        default:""
+    },
+    address: {
+        type: String,
+        default:""
+    },
+    phone: {
+        type: String,
+        default:""
     }
 }, {
     timestamps: true,

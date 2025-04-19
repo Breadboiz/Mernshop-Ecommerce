@@ -5,8 +5,10 @@ import { useAuthContext } from '../../context/AuthContext';
 import useGetcartItems from '../../hooks/useGetcartItems';
 import CartList from '../../components/CartList/CartList';
 import OrderSummary from '../../components/OrderSummary/OrderSummary';
-
+import { MdAddShoppingCart } from "react-icons/md";
+import { useNavigate } from 'react-router-dom';
 const CartPage = () => {
+  const navigate= useNavigate()
   const { authUser } = useAuthContext();
   const { cartItemsList, loading, refresh } = useGetcartItems();
 
@@ -41,8 +43,8 @@ const CartPage = () => {
         <span className="skeleton w-full h-[60vh]"></span>
       ) : isEmptyCart ? (
         <div className="min-h-[60vh] flex flex-col items-center justify-center text-gray-600">
-          <img src="/empty-cart.svg" alt="Empty cart" className="w-40 sm:w-60 mb-4" />
-          <p className="text-lg sm:text-xl font-medium">Giỏ hàng của bạn đang trống.</p>
+          <img src="../src/assets/empty-cart.png" alt="Empty cart" className="w-40 sm:w-60 mb-4" />
+          <div className="flex flex-col items-center justify-center gap-y-5 text-lg sm:text-xl font-medium text-center">Giỏ hàng của bạn đang trống <p onClick={() => navigate('/shop') } className='flex items-center gap-5 border border-gray-200 cursor-pointer hover:bg-blue-600 hover:text-white duration-150 text-center p-3'> <span>Mua sắm ngay nào</span> <MdAddShoppingCart /></p></div>
         </div>
       ) : (
         <div className="flex flex-col sm:flex-row w-full sm:w-[80%] mx-auto h-auto">

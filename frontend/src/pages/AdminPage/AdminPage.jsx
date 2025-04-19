@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Navbar from '../../components/Navbar'
 import Footer from '../../components/Footer'
-import { BarChart, PlusCircleIcon, ShoppingBasket } from 'lucide-react';
+import { BarChart, PlusCircleIcon, ShoppingBasket,User,ReceiptText   } from 'lucide-react';
 import { Outlet } from 'react-router-dom';
 
 
@@ -11,9 +11,11 @@ const AdminPage = () => {
   const location = useLocation();
 
   const tabs = [
-    { id: "create", label: "Create Product", icon: PlusCircleIcon, path: "/admin-panel/create" },
-    { id: "products", label: "Products", icon: ShoppingBasket, path: "/admin-panel/products" },
-    { id: "analytics", label: "Analytics", icon: BarChart, path: "/admin-panel/analytics" },
+    { id: "create", label: "Create Product", icon: PlusCircleIcon, path: "/admin-dashboard/create" },
+    { id: "products", label: "Products", icon: ShoppingBasket, path: "/admin-dashboard/products" },
+    { id: "users", label: "Users", icon: User, path: "/admin-dashboard/users" },
+    { id: "orders", label: "Orders", icon: ReceiptText, path: "/admin-dashboard/orders" },
+    { id: "analytics", label: "Analytics", icon: BarChart, path: "/admin-dashboard/analytics" },
   ];
 
   return (

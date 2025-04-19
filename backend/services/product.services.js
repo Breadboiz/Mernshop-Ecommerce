@@ -69,7 +69,7 @@ const createProductService = async (req) => {
     });
 
     const result = await product.save().catch((err) => console.log(err));
-    console.log(result);
+    // console.log(result);
     if (!result) {
       throw new BadRequestError("Product not created");
     }else{
@@ -92,9 +92,9 @@ const updateProductService = async (id, req) => {
     if (!product) throw new NotFoundError("Product not found");
 
     const files = req.files;
-    console.log("-----------------------------");
-    console.log("req.body", req.body);
-    console.log("-----------------------------");
+    // console.log("-----------------------------");
+    // console.log("req.body", req.body);
+    // console.log("-----------------------------");
     const {
       product_name,
       product_brand,
@@ -122,7 +122,10 @@ const updateProductService = async (id, req) => {
     if (product_dial_design) product.product_dial_design = product_dial_design;
     if (product_warranty) product.product_warranty = product_warranty;
     // Kiểu số
-    if (product_inStock) product.product_inStock = Number(product_inStock);
+
+    if (typeof product_inStock !== 'undefined') {
+      product.product_inStock = Number(product_inStock);
+    }
     if (product_price) product.product_price = Number(product_price);
     if (product_case_diameter) product.product_case_diameter = Number(product_case_diameter);
     // Nếu có thumbnail mới
@@ -148,8 +151,12 @@ const updateProductService = async (id, req) => {
         public_id: file.filename,
       }));
     }
-    const updated = await product.save();
-    console.log("✅ Product updated:", updated);
+    console.log("before update",product_inStock);
+    const updated = await productModel.findByIdAndUpdate(id, product, {
+     upsert: true , new: true,
+    })
+
+     console.log("✅ Product updated:", updated.product_inStock);
     return updated;
   } catch (error) {
     console.error("❌ Error updating product:", error);
