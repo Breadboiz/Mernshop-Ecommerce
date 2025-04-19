@@ -4,6 +4,7 @@ const keyTokenModels = require('../models/keyToken.model');
 const { AuthFailedError } = require('../core/error.response');
 
 const protectRoutes = async (req, res, next) => {
+
     const userID = req.headers['x-client-id']
     const keyStore = await keyTokenModels.findOne({user: userID}).lean().exec();
     if(!keyStore) throw new AuthFailedError('Invalid user 1');
@@ -49,7 +50,6 @@ const protectRefreshToken = async (req,res,next) =>{
 }
 
 const adminRoutes = async (req, res, next) =>{
-    // console.log(req.user);
     if(!req.user || !req.user.role === 'AD'){
         throw new AuthFailedError('Access denied - Admin only');
     }

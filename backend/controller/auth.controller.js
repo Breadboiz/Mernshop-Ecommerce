@@ -16,6 +16,7 @@ const login = async (req, res, next) =>{
     }).send(res);
 }
 const logout = async (req, res, next) =>{
+    console.log(`line 19`,req.keyStore);
     return new OK({
         message: "Logout successfully",
         metadata: await logoutService(req.keyStore, res)

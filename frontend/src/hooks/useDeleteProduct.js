@@ -15,6 +15,8 @@ const useDeleteProduct = () => {
         headers: {
           'x-client-id': clientId,
         },
+        withCredentials:true
+
       });
 
       toast.success(res.data.message);

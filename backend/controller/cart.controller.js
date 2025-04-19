@@ -28,7 +28,8 @@ const deleteCart = async (req, res) => {
 }
 
 const getCart = async (req, res) => {
-    const userID = req.user.id || req.headers['x-client-id'];
+   // console.log(req.headers);
+    const userID = req.headers['x-client-id'];
     return new SuccessResponse({
         message: "get cart successfully",
         metadata: await getListCartService({userID})

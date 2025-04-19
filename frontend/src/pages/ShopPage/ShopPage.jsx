@@ -4,15 +4,14 @@ import Filter from '../../components/Filter'
 import ProductList from '../../components/Product/ProductList'
 import React, { useEffect, useState } from 'react';
 import axiosInstance from '../../lib/axios';
-import {useAuthContext} from "../../context/AuthContext";  
-import { useSearchParams } from 'react-router-dom';
+// import {useAuthContext} from "../../context/AuthContext";  
+// import { useSearchParams } from 'react-router-dom';
 import useGetProductByFilter from '../../hooks/useGetProductByFilter';
 
 const ShopPage = () => {
   
   const categories = ['nam', 'nữ','đôi']
 
-  const {searchKeyword, setSearchKeyword} = useAuthContext();
   const [brands, setBrands] = useState([]); 
   //const [products, setProducts] = useState([]);
   const {products, loading } = useGetProductByFilter();

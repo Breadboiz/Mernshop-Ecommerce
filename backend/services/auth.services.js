@@ -20,9 +20,11 @@ const registerService = async ({username, email, roles ,password, confirmPasswor
    else{
     const salt = brcrypt.genSaltSync(10);
     const hashPassword = brcrypt.hashSync(password, salt);
+    const profilePic = `https://avatar.iran.liara.run/username?username=${username}`;
     const newuser = new userModel({ username,
                                     email,
                                     roles,
+                                    profilePic,
                                     password: hashPassword});
     const tokens =  generateTokens({id:newuser._id,email: newuser.email ,role: newuser.roles});
     await createKeyToken({userID: newuser._id, refreshToken: tokens.refreshToken});
@@ -30,18 +32,19 @@ const registerService = async ({username, email, roles ,password, confirmPasswor
             httpOnly: true,  
             secure: process.env.NODE_ENV !== "dev" ,   
             sameSite: 'Strict', // Ngăn chặn CSRF
-            maxAge: 24 * 60 * 60 * 1000
+            maxAge: 24 * 60 * 60 * 1000 * 15
         });
     res.cookie('refreshToken', tokens.refreshToken, {
             httpOnly: true,  
             secure: process.env.NODE_ENV !== "dev" ,   
             sameSite: 'Strict', // Ngăn chặn CSRF
-            maxAge: 24 * 60 * 60 * 1000 * 30
+            maxAge: 24 * 60 * 60 * 1000 * 60
         });
     await newuser.save();
     return {
         _id: newuser._id,
         username: newuser.username,
+        profilePic: newuser.profilePic,
         email: newuser.email,
         role: newuser.roles
 
@@ -77,6 +80,7 @@ const loginService = async ({email, password},res) => {
         _id: user._id,
         username: user.username,
         email: user.email,
+        profilePic: user.profilePic,
         role: user.roles
 
     }
@@ -108,14 +112,15 @@ const handleRefreshToken = async ({user,keyStore ,refreshToken},res) => {
         httpOnly: true,  
         secure: process.env.NODE_ENV !== "dev" ,   
         sameSite: 'Strict', // Ngăn chặn CSRF
-        maxAge: 24 * 60 * 60 * 1000
+        maxAge: 24 * 60 * 60 * 1000 * 15
     });
     res.cookie('refreshToken', tokens.refreshToken, {
         httpOnly: true,  
         secure: process.env.NODE_ENV !== "dev" ,   
         sameSite: 'Strict', // Ngăn chặn CSRF
-        maxAge: 24 * 60 * 60 * 1000 * 30
+        maxAge: 24 * 60 * 60 * 1000 * 60
     });
+    
     return tokens
 }
 

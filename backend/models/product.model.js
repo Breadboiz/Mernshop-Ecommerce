@@ -115,6 +115,22 @@ productSchema.pre('findOneAndUpdate', function(next) {
     }
     next();
 });
+
+productSchema.post('findOneAndUpdate', async function(doc) {
+  if (doc && doc._id && doc.product_inStock !== undefined) {
+ //   console.log("doc: ", doc._id);
+    const updatedStock = doc.product_inStock;
+    const Inventory = require('./inventory.model');
+    await Inventory.findOneAndUpdate(
+      { inventory_product_id: doc._id },
+      {
+        inventory_stock: updatedStock,
+      },
+      { upsert: true, new: true }
+    );
+  }
+});
+
 module.exports = model(DOCUMENT_NAME, productSchema);
 
 

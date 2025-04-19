@@ -4,8 +4,9 @@ import {Check} from "lucide-react"
 import SpecificationTab from '../DetailsTab/SpecificationTab';
 import axiosInstance from '../../lib/axios';
 import toast from 'react-hot-toast';
-
+import {useAuthContext} from  '../../context/AuthContext'
 const DetailsPanel = ({product,user }) => {
+    const {authUser} =  useAuthContext();
     const [loading, setLoading] = useState(false);
     const [selectedImage, setSelectedImage] = useState(0);
     const [quantity, setQuantity] = useState(0);
@@ -149,7 +150,10 @@ const DetailsPanel = ({product,user }) => {
                 </button>
                 </div>
                 {/* CArt */}
-               <button className='px-5 py-2 bg-black text-white  rounded-3xl' disabled={quantity === 0} onClick={handleAddToCart}>Add to cart</button>
+                {authUser && <button className='px-5 py-2 bg-black text-white  rounded-3xl' disabled={quantity === 0} onClick={()=>{
+                    quantity < product.product_inStock ? handleAddToCart() : toast.error("Sản phẩm vượt quá lượng hàng trong kho")
+                }}>Add to cart</button>
+            }
                </div>
                <SpecificationTab product={product}/>
                     </div>

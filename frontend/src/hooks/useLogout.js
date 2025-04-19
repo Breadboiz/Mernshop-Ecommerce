@@ -13,11 +13,13 @@ const useLogout = () => {
 
         try {
             const user = JSON.parse(localStorage.getItem("user"));
-            const clientId = user._id;
+            const userID = user._id;
+            
             const response = await axiosInstance.post("/auth/logout", {} , {
                 headers: {
-                    "x-client-id": clientId,
+                    "x-client-id": userID,
                 },
+                withCredentials:true
             })
             const { message } = response.data;
             console.log(response.data);

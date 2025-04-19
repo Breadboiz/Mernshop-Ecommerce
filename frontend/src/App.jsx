@@ -15,6 +15,9 @@ import CreateProductForm from './components/CreateProductForm/CreateProductForm'
 import ManagementTab from './components/ManageProductTab/ManagementTab';
 import AnalyticsTab from './components/AnalyticsTab/AnalyticsTab';
 import CartPage from './pages/CartPage/CartPage';
+import UsersmanagementTab from './components/UsersmanagementTab/UsersmanagementTab';
+import OrderManagementTab from './components/OrderManagementTab/OrderManagementTab';
+import CheckoutPage from './pages/CheckoutPage/CheckoutPage';
 function App() {
   const {authUser} = useAuthContext()
   return (
@@ -27,13 +30,16 @@ function App() {
             <Route path="/login" element={authUser ? <Navigate to="/" /> : <LoginPage />}></Route>
             <Route path="/shop" element={<ShopPage />}></Route>
             <Route path="/shop/:slug" element={<ProductDetailsPage />}></Route>
-            <Route path="/admin-panel" element={<AdminPage />}>
+            <Route path="/admin-dashboard" element={<AdminPage />}>
                 <Route path="create" element={<CreateProductForm />} />
                 <Route path="products" element={<ManagementTab />} />
                 <Route path="analytics" element={<AnalyticsTab />} />
                 <Route path="update/:id" element={<UpdateProductForm />} />
+                <Route path="users" element={<UsersmanagementTab />} />
+                <Route path="orders" element={<OrderManagementTab />} />
               </Route>
               <Route path="/cart/:id"  element={ authUser ?  <CartPage />: <Navigate to="/" /> }></Route>
+              <Route path='/checkout/:cartID' element={ authUser ?  <CheckoutPage/>: <Navigate to="/" />}></Route>
             <Route path="*" element={<NoPage/>}></Route>
           </Routes>
       <Toaster/>    
