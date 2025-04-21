@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 
 const AccountDetails = () => {
   const { authUser, setAuthUser } = useAuthContext();
-    console.log(authUser)
+    // console.log(authUser)
   const [formData, setFormData] = useState({
     street: authUser.address?.street || '',
     ward: authUser.address?.ward || '',
