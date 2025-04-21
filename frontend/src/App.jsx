@@ -19,6 +19,7 @@ import UsersmanagementTab from './components/UsersmanagementTab/UsersmanagementT
 import OrderManagementTab from './components/OrderManagementTab/OrderManagementTab';
 import CheckoutPage from './pages/CheckoutPage/CheckoutPage';
 import UserDashBoard from './pages/UserDashBoard/UserDashBoard';
+import OrderDetails from './pages/OrderDetails/OrderDetails';
 function App() {
   const {authUser} = useAuthContext()
   return (
@@ -32,18 +33,20 @@ function App() {
             <Route path="/shop" element={<ShopPage />}></Route>
             <Route path="/shop/:slug" element={<ProductDetailsPage />}></Route>
             <Route path="/admin-dashboard" element={<AdminPage />}>
-                <Route path="create" element={<CreateProductForm />} />
-                <Route path="products" element={<ManagementTab />} />
-                <Route path="analytics" element={<AnalyticsTab />} />
-                <Route path="update/:id" element={<UpdateProductForm />} />
-                <Route path="users" element={<UsersmanagementTab />} />
-                <Route path="orders" element={<OrderManagementTab />} />
+                <Route index element={<Navigate to="products" replace />} />
+
+
+                <Route path="create" element={ authUser ?  <CreateProductForm />: <Navigate to="/" /> } /> 
+                <Route path="products" element={ authUser ? <ManagementTab /> : <Navigate to="/" />} />
+                <Route path="analytics" element={ authUser ? <AnalyticsTab /> : <Navigate to="/" /> } />
+                <Route path="update/:id" element={authUser ? <UpdateProductForm /> : <Navigate to="/" />} />
+                <Route path="users" element={authUser ?<UsersmanagementTab /> : <Navigate to="/" />} />
+                <Route path="orders" element={authUser ? <OrderManagementTab /> : <Navigate to="/" />} />
               </Route>
-              <Route path="/cart/:id"  element={ authUser ?  <CartPage />: <Navigate to="/" /> }></Route>
-              <Route path='/checkout/:cartID' element={ authUser ?  <CheckoutPage/>: <Navigate to="/" />}></Route>
-              <Route path="/dashboard"   element={authUser? <UserDashBoard/>: <Navigate to="/" />}>
-                  
-              </Route>
+            <Route path="/cart/:id"  element={ authUser ?  <CartPage />: <Navigate to="/" /> }></Route>
+            <Route path='/checkout/:cartID' element={ authUser ?  <CheckoutPage/>: <Navigate to="/" />}></Route>
+            <Route path="/dashboard"   element={authUser? <UserDashBoard/>: <Navigate to="/" />}></Route>
+            <Route path='/order-details/:orderID' element={authUser?<OrderDetails/>: <Navigate to={"/"}/>}></Route>
             <Route path="*" element={<NoPage/>}></Route>
           </Routes>
       <Toaster/>    

@@ -47,7 +47,7 @@ const CartPage = () => {
           <div className="flex flex-col items-center justify-center gap-y-5 text-lg sm:text-xl font-medium text-center">Giỏ hàng của bạn đang trống <p onClick={() => navigate('/shop') } className='flex items-center gap-5 border border-gray-200 cursor-pointer hover:bg-blue-600 hover:text-white duration-150 text-center p-3'> <span>Mua sắm ngay nào</span> <MdAddShoppingCart /></p></div>
         </div>
       ) : (
-        <div className="flex flex-col sm:flex-row w-full sm:w-[80%] mx-auto h-auto">
+        <div className="flex flex-col sm:flex-row w-full  sm:w-[80%] mx-auto "> 
           <CartList
             cartItemsList={cartState}
             updateProductQuantity={updateProductQuantity}

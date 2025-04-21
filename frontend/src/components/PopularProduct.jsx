@@ -37,10 +37,10 @@ const PopularProduct = () => {
             <SwiperSlide key={index} className="bg-white p-4 rounded-lg shadow-lg hover:translate-y-[-10px] hover:shadow-[17px_18px_9px_-7px_rgba(0,_0,_0,_0.1)] duration-300 ease-in">
               
             <div className='mb-2'><img src={product.product_thumbnail.url} alt="" className='' /></div>
-            <div className='mb-2 text-md font-medium line-clamp-1 hover:line-clamp-2'>{product.product_name}</div>
-            <div className='mb-2 text-sm text-gray-500 font-light text-justify'>{product.product_category}</div>
-            <div className='mb-2 text-sm text-gray-500 font-light line-clamp-2'>
-                {product.description}
+            <div className='mb-2 text-md font-medium line-clamp-1 hover:line-clamp-2 text-center'>{product.product_name}</div>
+            <div className='mb-2 text-sm text-gray-500 font-light  text-center '>{product.product_category}</div>
+            <div className='mb-2 text-sm text-gray-500 font-light line-clamp-2 text-center'>
+                {product.product_description}
             </div>
             <div className='flex flex-col items-center justify-between'> 
                <div className='mb-2 text-sm text-red-500 font-semibold'>{product.product_price}VND</div>

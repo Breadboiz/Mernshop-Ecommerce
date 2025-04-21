@@ -6,11 +6,15 @@ import useGetCheckoutReview from '../../hooks/useGetCheckoutReview';
 import { useAuthContext } from '../../context/AuthContext';
 import axiosInstance from '../../lib/axios';
 import toast from 'react-hot-toast';
+import { hasEmptyValue } from '../../utils/hasEmptyValue';
+import {useNavigate} from 'react-router-dom'
 const CheckoutPage = () => {
+  const navigate = useNavigate()
   const {authUser} = useAuthContext();
   const { cartID } = useParams();
-  const { checkoutReview, loading } = useGetCheckoutReview(cartID);
-  console.log(authUser);
+  const { checkoutReview } = useGetCheckoutReview(cartID);
+  const [loading, setLoading] = useState(false)
+  // console.log(authUser);
   const [formData, setFormData] = useState({
     phone: authUser.phone,
     shipping: {
@@ -18,7 +22,7 @@ const CheckoutPage = () => {
       ward: authUser.address.ward,
       district: authUser.address.district,
       city: authUser.address.city,
-      country: authUser.address.country,
+      country: authUser.address.country || "Việt Nam",
     },
     payment: {
       paymentMethod: 'cod',
@@ -67,7 +71,12 @@ const CheckoutPage = () => {
       order_checkout: formData.checkoutSummary,
       order_products: formData.products,
     };
+    if (hasEmptyValue(payload.order_shipping) || !payload.order_phone) {
+      toast.error("Vui lòng nhập đầy đủ thông tin giao hàng");
+      return
+    }
     console.log('Order Payload:', payload);
+    setLoading(true)
     try {
       const userID= authUser._id;
       console.log(userID);
@@ -78,8 +87,13 @@ const CheckoutPage = () => {
         withCredentials: true
       })
       toast.success(res.data.message);
+      console.log(res.data.metadata)
+      navigate(`/order-details/${res.data.metadata._id}`)
     } catch (error) {
       console.error('Lỗi khi đặt hàng:', error);
+    }
+    finally{
+      setLoading(false)
     }
     // Gửi payload lên server ở đây nếu cần
   };
@@ -192,8 +206,9 @@ const CheckoutPage = () => {
           <button
             onClick={handleSubmit}
             className="w-full bg-black text-white mt-6 py-3 rounded-lg font-medium hover:opacity-90 transition"
+            
           >
-            Xác nhận đặt hàng
+            {loading ? <span className="loading loading-dots loading-md"></span> : "Xác nhận đặt hàng"}
           </button>
         </div>
       </main>

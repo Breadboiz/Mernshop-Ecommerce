@@ -5,6 +5,8 @@ import SpecificationTab from '../DetailsTab/SpecificationTab';
 import axiosInstance from '../../lib/axios';
 import toast from 'react-hot-toast';
 import {useAuthContext} from  '../../context/AuthContext'
+import { IoMdClose } from "react-icons/io";
+
 const DetailsPanel = ({product,user }) => {
     const {authUser} =  useAuthContext();
     const [loading, setLoading] = useState(false);
@@ -119,11 +121,11 @@ const DetailsPanel = ({product,user }) => {
                 <div className='text-sm font-semibold text-gray-500'>5 reviews</div>
                 </div>
                 <div className='flex items-center justify-between'>
-                <div className='line-through'>{ product?.product_price.toLocaleString('vi')} VND</div> 
                 <div className=''>{ product?.product_price.toLocaleString('vi')} đ</div> 
                 </div>
                
-               {product?.product_inStock > 0 &&   <span className='flex text-sm font-thin text-green-500  px-2 py-2 rounded-xl w-fit'><Check className='mr-2 pb-1'/>Còn hàng</span>}
+               {product?.product_inStock > 0 ?   <span className='flex text-sm font-thin text-green-500  px-2 py-2 rounded-xl w-fit'><Check className='mr-2 pb-1'/>Còn {product.product_inStock} sản phẩm</span> : 
+               <span className='flex text-sm font-thin text-red-500  px-2 py-2 rounded-xl w-fit'><IoMdClose className='mr-2 text-2xl pb-1'/>Hết hàng</span>}
                 
                 {/* number */}
                <div className='flex items-center gap-5'>
