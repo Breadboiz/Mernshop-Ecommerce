@@ -33,7 +33,11 @@ const orderSchema = new mongoose.Schema({
       }
     }
   ],
-  order_status: { type: String, enum: ['pending', 'completed', 'cancelled'], default: 'processing' },
+  order_status: { type: String, enum: ['pending', 'completed', 'cancelled'], default: 'pending' },
+  cancel_order: { 
+    reason: { type: String, default: 'Khách hàng hủy đơn hàng' },
+    by: { type: String,  default: 'Khách hàng' },
+   },  
   createdAt: { type: Date, default: Date.now }
 });
 

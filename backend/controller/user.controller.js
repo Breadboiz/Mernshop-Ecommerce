@@ -2,7 +2,15 @@
 
 const { model } = require('mongoose');
 const { SuccessResponse } = require('../core/success.response');
-const { getUserService,getUserByID,updateUserstatus,updateUserInfo,getAllUserService } = require('../services/user.services');
+const { getUserService,getUserByID, updateUserstatus ,updateUserInfo,getAllUserService } = require('../services/user.services');
+
+const findUserByID = async ()=>{
+    const Id = req.params.id 
+    return new SuccessResponse({
+        message:  `found user ${Id}`,
+        metadata: await getUserByID(Id)
+    }).send(res)
+}
 
 const updateUser= async (req,res) => {
     console.log(req.user);
@@ -14,6 +22,21 @@ const updateUser= async (req,res) => {
    }).send(res);
  }   
 
+const findAllUser = async (req, res)=>{
+    return new SuccessResponse({
+        message: "found all user",
+        metadata: await getAllUserService()
+    }).send(res)
+}
+const changeUserStatus = async(req, res)=>{
+    return new SuccessResponse({
+        message: "Changed user status",
+        metadata: await updateUserstatus()
+    })
+}
 module.exports = {
-    updateUser
+    updateUser,
+    findAllUser,
+    changeUserStatus,
+    findUserByID
 } 

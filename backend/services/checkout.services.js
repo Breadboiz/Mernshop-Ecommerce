@@ -6,6 +6,9 @@ const inventoryModel = require("../models/inventory.model");
 const orderModel = require("../models/order.model");
 const { NotFoundError, BadRequestError } = require("../core/error.response");
 const { default: mongoose } = require("mongoose");
+const convertToMongodbObj = require("../utils/convertToMongodbObj").convertToMongodbObj;
+const { insertInventory } = require("./inventory.services");
+const userModel = require("../models/user.model");
 
 const checkProductByServer = async (productID, quantity,product_thumbnail) => {
   const foundProduct = await productModel.findById(productID);
@@ -125,32 +128,138 @@ const orderService = async (payload) => {
   }
 };
 
+const getAllOrder = async (page = 1, limit = 10, status) => {
+  const skip = (page - 1) * limit;
+  console.log('limit',limit)
+  const query = {};
+  if (status && status !== 'all') {
+    query.order_status = status;
+  }
+  console.log('query',query)
+  const orders = await 
+    orderModel.find(query)
+      .skip(skip)
+      .limit(limit)
+      .lean()
 
-
-const getOrderByUser = async (userID) => {
-  const orders = await orderModel.find({ order_user_id: userID });
-  if (!orders) throw new NotFoundError('Không tìm thấy đơn hàng');
-  return orders;
+  const total = await orderModel.find({}).countDocuments();
+  return {
+    orders,
+    pagination: {
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+    }
+  };
 };
 
+const getOrderByUser = async (userID, page = 1, limit = 10, status) => {
+  const skip = (page - 1) * limit;
 
-const getOneOrder = async (orderID) => {
-  const order = await orderModel.findById(orderID);
+  const query = { order_user_id: userID };
+  if (status && status !== 'all') {
+    query.order_status = status;
+  }
+  const orders = await orderModel.find(query)
+    .skip(skip)
+    .limit(limit)
+    .sort({ createdAt: -1 })
+    .lean();
+
+  const total = await orderModel.countDocuments(query);
+
+  if (!orders || orders.length === 0) {
+    return new NotFoundError('Không tìm thấy đơn hàng của người dùng này');
+  }
+
+  return {
+    orders,
+    pagination: {
+      page,
+      limit,
+      totalItems: total,
+      totalPages: Math.ceil(total / limit)
+    }
+  };
+};
+
+const getOrderbyID = async (orderID, userID) => {
+  const user = await userModel.findById(userID).lean();
+  if (!user) throw new NotFoundError('Người dùng không tồn tại');
+
+  const order = await orderModel.findById(orderID).lean();
   if (!order) throw new NotFoundError('Không tìm thấy đơn hàng');
+
+  if (user.roles !== 'AD' && order.order_user_id.toString() !== userID.toString()) {
+    throw new NotFoundError('Bạn không có quyền truy cập đơn hàng này');
+  }
+
   return order;
 };
 
-const cancelOrder = async (orderID) => {
-  const order = await orderModel.findById(orderID);
-  if (!order) throw new NotFoundError('Không tìm thấy đơn hàng');
-  order.order_status = 'canceled';
-  await order.save();
-  return order;
+
+const cancelOrder = async ({orderID,reason,userID}) => {
+  const user = await userModel.findById(userID).lean();
+
+    const order = await orderModel.findById(orderID);
+
+    if (!order) {
+      return new NotFoundError({ message: 'Đơn hàng không tồn tại!' });
+    }
+    order.cancel_order = {
+      reason: reason || 'Khách hàng hủy đơn hàng',
+      by: user.username,
+    };
+    order.order_status = 'cancelled';
+    for (const product of order.order_products) {
+      const inventory = await inventoryModel.findOne({ inventory_product_id: product.productID });
+
+      if (inventory) {
+        inventory.inventory_stock += product.quantity;
+        await inventory.save();
+      } else {
+        await insertInventory({
+          inventory_product_id: product.productID,
+          inventory_stock: product.quantity,
+        })
+      }
+    }
+    // Lưu lại thông tin hủy vào đơn hàng
+    return await order.save();
+  
 };  
 
+
+const confirmOrder =async ({orderID,userID})=>{
+  const user = await userModel.findById(userID).lean();
+  if (!user) throw new NotFoundError('Người dùng không tồn tại');
+  const order = await orderModel.findById(orderID);
+    if (!order) {
+      return new NotFoundError({ message: 'Đơn hàng không tồn tại!' });
+    }
+    if (order.order_user_id.toString() !== userID.toString()) {
+      throw new NotFoundError('Bạn không có quyền truy cập đơn hàng này');
+    }  
+    order.order_status = 'completed';
+    for(const orderItem of order.order_products){
+      const product = await productModel.findById(orderItem.productID).lean()
+      if(!product) throw new NotFoundError('Không tìm thấy sản phẩm');
+      await productModel.findByIdAndUpdate(orderItem.productID, {
+        $inc: { product_sold: orderItem.quantity }
+      });
+    }
+    return await order.save();
+
+}
 module.exports = {
   checkoutReviewService,
-  orderService
+  orderService,
+  getOrderbyID,
+  getOrderByUser,
+  getAllOrder,
+  cancelOrder,
+  confirmOrder
 };
 
 

@@ -18,4 +18,6 @@ router.use('/checkout', require('./checkout-routes')); //gọi từ checkout-rou
 router.use('/order', require('./order-routes')); //gọi từ order-routes
 
 router.use('/inventory', require('./inventory')); //gọi từ inventory
+
+router.use('/analytics', require('./analystics-routes')); //gọi từ analystics-routes
 module.exports = router;
