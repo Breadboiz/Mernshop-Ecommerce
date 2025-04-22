@@ -43,7 +43,7 @@ const PopularProduct = () => {
                 {product.product_description}
             </div>
             <div className='flex flex-col items-center justify-between'> 
-               <div className='mb-2 text-sm text-red-500 font-semibold'>{product.product_price}VND</div>
+               <div className='mb-2 text-sm text-red-500 font-semibold'>{product.product_price.toLocaleString('vi-VN')}VND</div>
                <button className="btn  btn-outline mb-5" onClick={() => navigate(`/shop/${product.slug}`)}>Buy now</button>
             </div>
             </SwiperSlide>

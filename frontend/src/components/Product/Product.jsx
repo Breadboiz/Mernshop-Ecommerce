@@ -15,7 +15,7 @@ const Product = ({product}) => {
                 {product.description}
             </div>
             <div className='flex flex-col items-center justify-between'> 
-               <div className='mb-2 text-sm text-red-500 font-semibold'>{(product.product_price)}VND</div>
+               <div className='mb-2 text-sm text-red-500 font-semibold'>{(product.product_price).toLocaleString('vi-VN')}VND</div>
                <button className="btn  btn-outline mb-5 cursor-pointer" onClick={() => navigate(`/shop/${product.slug}`)}>Buy now</button>
                {/* <div className='mb-2 text-sm bg-gray-200 font-light line-through'>20% off </div> */}
             </div>
