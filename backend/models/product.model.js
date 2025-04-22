@@ -115,7 +115,16 @@ productSchema.pre('findOneAndUpdate', function(next) {
     }
     next();
 });
-
+productSchema.post('findOneAndDelete', async function (doc) {
+  if (doc && doc._id) {
+    try {
+      const Inventory = require('./inventory.model');
+      await Inventory.findOneAndDelete({ inventory_product_id: doc._id });
+    } catch (error) {
+      console.error('Lỗi khi xóa inventory liên quan:', error);
+    }
+  }
+});
 // productSchema.post('findOneAndUpdate', async function(doc) {
 //   if (doc && doc._id && doc.product_inStock !== undefined) {
 //  //   console.log("doc: ", doc._id);

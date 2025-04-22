@@ -24,13 +24,13 @@ const createProductService = async (req) => {
     }));
 
     const {
-      product_name,
-      product_brand,
-      product_inStock,
-      product_price,
-     
+      product_name, /*required: true*/
+      product_brand, /*required: true*/
+      product_inStock, /*required: true*/
+      product_price, /*required: true*/
+      product_category, /*required: true*/
+
       product_description,
-      product_category,
       product_material,
       product_mechanism,
       product_water_resistance,
@@ -49,13 +49,13 @@ const createProductService = async (req) => {
         throw new BadRequestError("Product already exists")
       }
     const product = new productModel({
-      product_name,
-      product_brand,
-      product_inStock,
-      product_price,
-     
+      product_name, /*required: true*/
+      product_brand, /*required: true*/
+      product_inStock, /*required: true*/
+      product_price, /*required: true*/
+      product_category, /*required: true*/
+
       product_description,
-      product_category,
       product_material,
       product_mechanism,
       product_water_resistance,
